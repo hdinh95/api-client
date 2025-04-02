@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "4770c6a6-35de-4029-a1f0-1a5b2d9d2653",
+		"name": "IPP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12311253"
+	},
+	"item": [
+		{
+			"name": "Portfolio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Portfolio 200\", () => {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{apiKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/portfolio",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"portfolio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get Detail\", () => {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{apiKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "CF-Access-Client-Id",
+						"value": "{{cf-client}}",
+						"type": "text"
+					},
+					{
+						"key": "CF-Access-Client-Secret",
+						"value": "{{cf-pw}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://create-test.austrian-standards.at/api/internal/document-issues/372633?language=en",
+					"protocol": "https",
+					"host": [
+						"create-test",
+						"austrian-standards",
+						"at"
+					],
+					"path": [
+						"api",
+						"internal",
+						"document-issues",
+						"372633"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

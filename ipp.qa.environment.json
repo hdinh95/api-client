@@ -1,0 +1,15 @@
+{
+	"id": "73f08530-e0e6-42a3-ab36-c382c744d5e2",
+	"name": "QA",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "https://ipp-portal-qa.pages.dev/backend/mainframe",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-04-01T14:28:34.888Z",
+	"_postman_exported_using": "Postman/11.39.0"
+}

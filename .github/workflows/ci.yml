@@ -15,4 +15,4 @@ jobs:
         run: npm install -g newman
 
       - name: Run collections
-        run: newman run create.collection.json
+        run: newman run ipp.collection.json -e ipp.qa.environment.json --env-var "apiKey=${{ secrets.APIKEY }}" --env-var "cf-client=${{ secrets.CF_CLIENT }}" --env-var "cf-pw=${{ secrets.CF_PW }}"
