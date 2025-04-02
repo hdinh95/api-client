@@ -2,7 +2,7 @@ name: Postman API Tests
 
 on:
   schedule:
-    - cron: 14 13 * * *
+    - cron: 16 9 * * *
 
 jobs:
   test:
