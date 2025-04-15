@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4770c6a6-35de-4029-a1f0-1a5b2d9d2653",
-		"name": "IPP",
+		"_postman_id": "a672683d-3c44-44f7-9439-151087078dfa",
+		"name": "CICD Pipeline (IPP)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "12311253"
+		"_exporter_id": "32091866"
 	},
 	"item": [
 		{
@@ -41,9 +41,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/api/v1/portfolio",
+					"raw": "{{ipp-baseurl}}/api/v1/portfolio",
 					"host": [
-						"{{baseUrl}}"
+						"{{ipp-baseurl}}"
 					],
 					"path": [
 						"api",
@@ -52,76 +52,30 @@
 					]
 				}
 			},
-			"response": []
-		},
-		{
-			"name": "create",
-			"event": [
+			"response": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Get Detail\", () => {",
-							"    pm.response.to.have.status(200)",
-							"})"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "{{apiKey}}",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "X-API-KEY",
-							"type": "string"
+					"name": "Portfolio",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+							"host": [
+								"{{ipp-baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"portfolio"
+							]
 						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "CF-Access-Client-Id",
-						"value": "{{cf-client}}",
-						"type": "text"
 					},
-					{
-						"key": "CF-Access-Client-Secret",
-						"value": "{{cf-pw}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "https://create-test.austrian-standards.at/api/internal/document-issues/372633?language=en",
-					"protocol": "https",
-					"host": [
-						"create-test",
-						"austrian-standards",
-						"at"
-					],
-					"path": [
-						"api",
-						"internal",
-						"document-issues",
-						"372633"
-					],
-					"query": [
-						{
-							"key": "language",
-							"value": "en"
-						}
-					]
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

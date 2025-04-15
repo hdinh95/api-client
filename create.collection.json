@@ -1,46 +1,142 @@
 {
 	"info": {
-		"_postman_id": "1116f45e-f2e7-462e-946c-2e6372f03711",
-		"name": "Create",
+		"_postman_id": "54c075d6-5f4d-4393-b56c-ed34b4a901b1",
+		"name": "CIXCreate API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "12311253"
+		"_exporter_id": "32091866"
 	},
 	"item": [
 		{
-			"name": "Internal",
-			"item": [
+			"name": "create",
+			"event": [
 				{
-					"name": "DI - Detail",
-					"event": [
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get Detail\", () => {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200)",
-									"})"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+							"key": "value",
+							"value": "{{detail-api-key}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
 						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "CF-Access-Client-Id",
+						"value": "{{cf-client}}",
+						"type": "text"
+					},
+					{
+						"key": "CF-Access-Client-Secret",
+						"value": "{{cf-pw}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{create-baseurl}}/api/internal/document-issues/1230459?language=de",
+					"host": [
+						"{{create-baseurl}}"
 					],
-					"request": {
+					"path": [
+						"api",
+						"internal",
+						"document-issues",
+						"1230459"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "de"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "DE",
+					"originalRequest": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "CF-Access-Client-Id",
+								"value": "{{cf-client}}",
+								"type": "text"
+							},
+							{
+								"key": "CF-Access-Client-Secret",
+								"value": "{{cf-pw}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "https://create-mig.on-norm.at/api/internal/document-issues/372633?language=en",
-							"protocol": "https",
+							"raw": "{{baseurl}}/api/internal/document-issues/1230459?language=de",
 							"host": [
-								"create-mig",
-								"on-norm",
-								"at"
+								"{{baseurl}}"
 							],
 							"path": [
 								"api",
 								"internal",
 								"document-issues",
-								"372633"
+								"1230459"
+							],
+							"query": [
+								{
+									"key": "language",
+									"value": "de"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "EN",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "CF-Access-Client-Id",
+								"value": "{{cf-client}}",
+								"type": "text"
+							},
+							{
+								"key": "CF-Access-Client-Secret",
+								"value": "{{cf-pw}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{create-baseurl}}/api/internal/document-issues/1230459?language=en",
+							"host": [
+								"{{create-baseurl}}"
+							],
+							"path": [
+								"api",
+								"internal",
+								"document-issues",
+								"1230459"
 							],
 							"query": [
 								{
@@ -50,125 +146,12 @@
 							]
 						}
 					},
-					"response": []
-				},
-				{
-					"name": "DI - Detail - Bad Request",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"let body = pm.response.json();",
-									"",
-									"pm.test(\"Bad Request with error message\", function() {",
-									"    pm.response.to.have.status(400);",
-									"    pm.expect(body.code).to.eq(\"INVALID_LANGUAGE\")",
-									"    pm.expect(body.message).to.eq(null)",
-									"})"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://create-mig.on-norm.at/api/internal/document-issues/372633?language=e",
-							"protocol": "https",
-							"host": [
-								"create-mig",
-								"on-norm",
-								"at"
-							],
-							"path": [
-								"api",
-								"internal",
-								"document-issues",
-								"372633"
-							],
-							"query": [
-								{
-									"key": "language",
-									"value": "e"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "apikey",
-				"apikey": [
-					{
-						"key": "value",
-						"value": "",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
 				}
 			]
-		}
-	],
-	"auth": {
-		"type": "apikey",
-		"apikey": [
-			{
-				"key": "key",
-				"value": "X-API-KEY",
-				"type": "string"
-			},
-			{
-				"key": "value",
-				"value": "r5GqvHbVygC7ks4qMz9Uk9LOEDy5D3jZWG8Qv1LuV2kqHWJsYz4yL5-1qkHdYHZ9",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
 		}
 	]
 }

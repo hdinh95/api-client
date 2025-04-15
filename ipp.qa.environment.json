@@ -1,15 +1,27 @@
 {
-	"id": "73f08530-e0e6-42a3-ab36-c382c744d5e2",
-	"name": "QA",
+	"id": "6e3e588d-d3ed-4b0c-b54e-b8e157dd2156",
+	"name": "CICD Environemnt",
 	"values": [
 		{
-			"key": "baseUrl",
+			"key": "create-baseurl",
+			"value": "https://create-mig.on-norm.at",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "detail-api-key",
+			"value": "vNKQRRoCNUNp8JvhYGnsgEdQXIBg2sWg9jx8roExuM4Uz8JZDn7PeJsh1oTlbxYG",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "ipp-baseurl",
 			"value": "https://ipp-portal-qa.pages.dev/backend/mainframe",
 			"type": "default",
 			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2025-04-01T14:28:34.888Z",
-	"_postman_exported_using": "Postman/11.39.0"
+	"_postman_exported_at": "2025-04-15T13:01:24.526Z",
+	"_postman_exported_using": "Postman/11.41.0"
 }
