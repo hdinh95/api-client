@@ -22,9 +22,11 @@ runs:
   steps:
     - name: Install Newman
       run: npm install -g newman && npm install -g newman-report-htmlextra
+      shell: bash
 
     - name: Create Directory for Postman results
       run: mkdir -p postmanResults
+      shell: bash
 
     - name: Run collections
       run: newman run ${{ inputs.postman-collection }} \
@@ -33,6 +35,7 @@ runs:
         --report-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
         --env-var "cf-client=${{ inputs.cf-client }}" \
         --env-var "cf-pw=${{ inputs.cf-pw }}"
+      shell: bash
 
     - name: Upload Report
       uses: actions/upload-artifact@v4
