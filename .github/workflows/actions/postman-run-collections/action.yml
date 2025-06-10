@@ -24,6 +24,7 @@ runs:
 
     - name: Test
       run: pwd && ls
+      shell: bash
 
     - name: Run collections
       run: newman run ${{ inputs.postman-collection }} \
