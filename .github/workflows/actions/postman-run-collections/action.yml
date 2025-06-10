@@ -27,9 +27,10 @@ runs:
       shell: bash
 
     - name: Run collections
-      run: newman run ${{ inputs.postman-collection }} \
-        -e ${{ inputs.postman-environment }} \
-        -r htmlextra \
+      run: > 
+        newman run ${{ inputs.postman-collection }} 
+        -e ${{ inputs.postman-environment }} 
+        -r htmlextra 
         --report-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
       shell: bash
 
