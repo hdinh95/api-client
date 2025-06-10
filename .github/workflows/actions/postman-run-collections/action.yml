@@ -30,8 +30,8 @@ runs:
       run: > 
         newman run ${{ inputs.postman-collection }} 
         -e ${{ inputs.postman-environment }} 
-        -r htmlextra 
-        --report-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
+        -r htmlextra
+        --reporter-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
       shell: bash
 
     - name: Upload Report
