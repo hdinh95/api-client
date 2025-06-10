@@ -16,5 +16,5 @@ jobs:
           postman-environment: ipp.qa.environment.json
           cf-client: ${{ secrets.CF_CLIENT }}
           cf-pw: ${{ secrets.CF_PW }}
-          report-filename: 'ipp-api-report'
+          report-filename: ipp-api-report
 
