@@ -42,4 +42,4 @@ runs:
       if: always()
       with:
         name: ${{ inputs.report-filename }}
-        path: /postmanResults/${{ inputs.report-filename }}.html
+        path: postmanResults/${{ inputs.report-filename }}.html
