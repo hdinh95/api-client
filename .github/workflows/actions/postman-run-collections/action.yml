@@ -15,7 +15,7 @@ runs:
   using: "composite"
   steps:
     - name: Install Newman
-      run: npm install -g newman, newman-reporter-htmlextra
+      run: npm install -g newman newman-reporter-htmlextra
       shell: bash
 
     - name: Create Directory for Postman results
