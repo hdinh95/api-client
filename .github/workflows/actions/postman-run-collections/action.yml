@@ -15,12 +15,15 @@ runs:
   using: "composite"
   steps:
     - name: Install Newman
-      run: npm install -g newman && npm install -g newman-reporter-htmlextra
+      run: npm install -g newman, newman-reporter-htmlextra
       shell: bash
 
     - name: Create Directory for Postman results
       run: mkdir -p postmanResults
       shell: bash
+
+    - name: Test
+      run: pwd && ls
 
     - name: Run collections
       run: newman run ${{ inputs.postman-collection }} \
