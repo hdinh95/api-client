@@ -1,0 +1,41 @@
+name: Run Postman Collection
+inputs:
+  postman-collection:
+    description: Postman Collection
+    required: true
+  postman-environment:
+    description: Postman Collection Environment
+    required: true
+  cf-client:
+    description: Cloudflare Client Name
+    required: true
+  cf-pw:
+    description: Cloudflare Client Password
+    required: true
+  report-filename:
+    description: Filename of the Report
+    required: true
+    default: report
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Newman
+      run: npm install -g newman && npm install -g newman-report-htmlextra
+
+    - name: Create Directory for Postman results
+      run: mkdir -p postmanResults
+
+    - name: Run collections
+      run: newman run ${{ inputs.postman-collection }} \
+        -e ${{ inputs.postman-environment }} \
+        -r htmlextra \
+        --report-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
+        --env-var "cf-client=${{ inputs.cf-client }}" \
+        --env-var "cf-pw=${{ inputs.cf-pw }}"
+
+    - name: Upload Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.report-filename }}
+        path: /postmanResults/${{ inputs.report-filename }}.html

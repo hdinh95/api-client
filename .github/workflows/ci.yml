@@ -1,9 +1,6 @@
 name: Postman API Tests
 
-on:
-  schedule:
-    - cron: '15 * * * *'
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   test:
@@ -12,8 +9,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Execute Postman Collections
+        uses: ./.github/workflows/actions/postman-run-collections
+        with:
+          postman-collection: ipp.collection.json
+          postman-environment: ipp.qa.environment.json
+          cf-client: ${{ secrets.CF_CLIENT }}
+          cf-pw: ${{ secrets.CF_PW }}
+          report-filename: 'ipp-api-report'
 
-      - name: Run collections
-        run: newman run ipp.collection.json -e ipp.qa.environment.json --env-var "apiKey=${{ secrets.APIKEY }}" --env-var "cf-client=${{ secrets.CF_CLIENT }}" --env-var "cf-pw=${{ secrets.CF_PW }}"
