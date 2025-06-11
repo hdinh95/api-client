@@ -45,7 +45,7 @@ runs:
         fi
         
         # Append Cloudflare Credentials if provided
-        if [ ${{inputs.cf-client}} ] && [ ${{inputs.cf-password}} ]; then
+        if [ ${{inputs.cf-client}} != "" ] && [ ${{inputs.cf-password}} != "" ]; then
           newman_cmd = "$newman_cmd -e cf_client=${{inputs.cf-client}} -e cf_password=${{inputs.cf-password}}"
         fi
 
