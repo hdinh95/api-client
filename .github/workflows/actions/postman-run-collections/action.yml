@@ -10,6 +10,18 @@ inputs:
     description: Filename of the Report
     required: true
     default: report
+  api-key:
+    description: Postman API Key (optional)
+    required: false
+    default: ""
+  cf-client:
+    description: Cloudflare Client ID (optional)
+    required: false
+    default: ""
+  cf-password:
+    description: Cloudflare Client Password (optional)
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -22,16 +34,24 @@ runs:
       run: mkdir -p postmanResults
       shell: bash
 
-    - name: Test
-      run: pwd && ls
-      shell: bash
-
     - name: Run collections
-      run: > 
-        newman run ${{ inputs.postman-collection }} 
-        -e ${{ inputs.postman-environment }} 
-        -r htmlextra
-        --reporter-htmlextra-export postmanResults/${{ inputs.report-filename }}.html
+      run: |
+        # Initial Command to run Newman with the provided inputs
+        newman_cmd="newman run ${{ inputs.postman-collection }} -e ${{ inputs.postman-environment }} -r cli,htmlextra --reporter-htmlextra-export postmanResults/${{ inputs.report-filename }}.html"
+        
+        # Append API key if provided
+        if [ ${{inputs.api-key}} != ""]; then
+          newman_cmd = "$newman_cmd -e apiKey=${{inputs.api-key}}"
+        fi
+        
+        # Append Cloudflare Credentials if provided
+        if [ ${{inputs.cf-client}} ] && [ ${{inputs.cf-password}} ]; then
+          newman_cmd = "$newman_cmd -e cf_client=${{inputs.cf-client}} -e cf_password=${{inputs.cf-password}}"
+        fi
+
+        # Execute the Newman command
+        echo "Execute Newman command"
+        newman_cmd
       shell: bash
 
     - name: Upload Report
@@ -40,3 +60,4 @@ runs:
       with:
         name: ${{ inputs.report-filename }}
         path: postmanResults/${{ inputs.report-filename }}.html
+        retention-days: 10
