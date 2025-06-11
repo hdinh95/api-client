@@ -41,12 +41,12 @@ runs:
         
         # Append API key if provided
         if [ "${{inputs.api-key}}" != "" ]; then
-          newman_cmd = "$newman_cmd -e apiKey=${{inputs.api-key}}"
+          newman_cmd="$newman_cmd -e apiKey=${{inputs.api-key}}"
         fi
         
         # Append Cloudflare Credentials if provided
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
-          newman_cmd = "$newman_cmd -e cf_client=${{inputs.cf-client}} -e cf_password=${{inputs.cf-password}}"
+          newman_cmd="$newman_cmd -e cf_client=${{inputs.cf-client}} -e cf_password=${{inputs.cf-password}}"
         fi
 
         # Execute the Newman command
