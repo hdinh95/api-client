@@ -51,7 +51,7 @@ runs:
 
         # Execute the Newman command
         echo "Execute Newman command"
-        newman_cmd
+        $newman_cmd
       shell: bash
 
     - name: Upload Report

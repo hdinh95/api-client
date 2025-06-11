@@ -15,4 +15,7 @@ jobs:
           postman-collection: ipp.collection.json
           postman-environment: ipp.qa.environment.json
           report-filename: ipp-api-report
+          api-key: 'TESTSETEST'
+          cf-client: 'TESTCFCLIENT'
+          cf-password: 'TESTCFPASSWORD'
 
