@@ -40,7 +40,7 @@ runs:
         newman_cmd="newman run ${{ inputs.postman-collection }} -e ${{ inputs.postman-environment }} -r cli,htmlextra --reporter-htmlextra-export postmanResults/${{ inputs.report-filename }}.html"
         
         # Append API key if provided
-        if [ "${{inputs.api-key}}" != ""]; then
+        if [ "${{inputs.api-key}}" != "" ]; then
           newman_cmd = "$newman_cmd -e apiKey=${{inputs.api-key}}"
         fi
         
