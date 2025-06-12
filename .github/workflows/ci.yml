@@ -3,7 +3,7 @@ name: Postman API Tests
 on: workflow_dispatch
 
 jobs:
-  test:
+  ipp-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -19,6 +19,9 @@ jobs:
           cf-client: "TESTCFCLIENT"
           cf-password: "TESTCFPASSWORD"
 
+  create-test:
+    runs-on: ubuntu-latest
+    steps:
       - name: Execute Create Postman Collections
         uses: ./.github/workflows/actions/postman-run-collections
         with:
