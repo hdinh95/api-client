@@ -81,7 +81,7 @@ runs:
 
     - name: Run collections
       run: |
-        $NEWMAN_CMD=${{steps.build-newman-command.outputs.NEWMAN_CMD}}
+        NEWMAN_CMD=${{steps.build-newman-command.outputs.NEWMAN_CMD}}
         
         # Execute the Newman command
         echo "Execute Newman command: $NEWMAN_CMD"
