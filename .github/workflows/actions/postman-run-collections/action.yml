@@ -53,7 +53,7 @@ runs:
     - name: Run collections
       run: |
         # Initial Command to run Newman with the provided inputs
-        NEWMAN_CMD="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli, htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
+        NEWMAN_CMD="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli,htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
         
         # Apply Postman Datasource
         if [ "${{inputs.datasource}}" != "" ]; then
