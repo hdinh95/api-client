@@ -47,37 +47,37 @@ runs:
       shell: bash
 
     - name: Log
-      run: pwd && ls
+      run: pwd && ls create && ls reports
       shell: bash
 
-    - name: Run collections
+    - name: Build Newman command
       run: |
         # Initial Command to run Newman with the provided inputs
-        newman_cmd="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli,htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
+        newman_cmd="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli, htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
         
         # Apply Postman Datasource
         if [ "${{inputs.datasource}}" != "" ]; then
-          newman_cmd="$newman_cmd --iteration-data ${{ inputs.datasource}}"
+        newman_cmd="$newman_cmd --iteration-data ${{ inputs.datasource}}"
         fi
         
         # Apply Postman Folder
         if [ "${{inputs.datasource}}" != "" ]; then
-          newman_cmd="$newman_cmd --folder \"${{ inputs.folder}}\""
+        newman_cmd="$newman_cmd --folder \"${{ inputs.folder}}\""
         fi
         
         # Apply API key
         if [ "${{inputs.api-key}}" != "" ]; then
-          newman_cmd="$newman_cmd --env-var \"api-key=${{inputs.api-key}}\""
+        newman_cmd="$newman_cmd --env-var \"api-key=${{inputs.api-key}}\""
         fi
         
         # Apply Cloudflare Credentials
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
-          newman_cmd="$newman_cmd --env-var \"cf-client=${{inputs.cf-client}}\" --env-var \"cf-password=${{inputs.cf-password}}\""
+        newman_cmd="$newman_cmd --env-var \"cf-client=${{inputs.cf-client}}\" --env-var \"cf-password=${{inputs.cf-password}}\""
         fi
+      shell: bash
 
-        # Execute the Newman command
-        echo "Execute Newman command: $newman_cmd"
-        $newman_cmd
+    - name: Run collections
+      run: $newman_cmd
       shell: bash
 
     - name: Upload Report
