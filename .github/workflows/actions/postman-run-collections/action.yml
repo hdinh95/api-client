@@ -84,7 +84,7 @@ runs:
         # $newman_cmd=${{steps.build-newman-command.outputs.newman_cmd}}
         
         # Execute the Newman command
-        echo "Execute Newman command: ${{steps.build-newman-command.outputs.newman_cmd}}"
+        echo "Execute Newman command: ${{steps.build-newman-command.outputs}}"
         $newman_cmd
       shell: bash
 
