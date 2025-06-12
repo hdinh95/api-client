@@ -81,11 +81,11 @@ runs:
 
     - name: Run collections
       run: |
-        # $NEWMAN_CMD=${{steps.build-newman-command.outputs.NEWMAN_CMD}}
+        $NEWMAN_CMD=${{steps.build-newman-command.outputs.NEWMAN_CMD}}
         
         # Execute the Newman command
-        echo "Execute Newman command: ${{steps.build-newman-command.outputs.NEWMAN_CMD}}"
-        $newman_cmd
+        echo "Execute Newman command: $NEWMAN_CMD"
+        $NEWMAN_CMD
       shell: bash
 
     - name: Upload Report
