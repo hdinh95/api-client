@@ -22,6 +22,9 @@ jobs:
   create-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
       - name: Execute Create Postman Collections
         uses: ./.github/workflows/actions/postman-run-collections
         with:
