@@ -47,7 +47,7 @@ runs:
       shell: bash
 
     - name: Log
-      run: pwd && ls create && ls reports
+      run: pwd && ls
       shell: bash
 
     - name: Run collections
