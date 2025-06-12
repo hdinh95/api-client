@@ -81,6 +81,7 @@ runs:
       shell: bash
 
     - name: Log
+      if: always()
       run: ls reports
       shell: bash
 
