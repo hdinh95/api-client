@@ -58,7 +58,7 @@ runs:
         
         # Apply Postman Folder
         if [ "${{inputs.datasource}}" != "" ]; then
-          newman_cmd="$newman_cmd --folder ${{ inputs.folder}}"
+          newman_cmd="$newman_cmd --folder \"${{ inputs.folder}}\""
         fi
         
         # Apply API key
