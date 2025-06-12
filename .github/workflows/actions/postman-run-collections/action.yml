@@ -80,6 +80,10 @@ runs:
         $NEWMAN_CMD
       shell: bash
 
+    - name: Log
+      run: ls reports
+      shell: bash
+
     - name: Upload Report
       uses: actions/upload-artifact@v4
       if: always()
