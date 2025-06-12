@@ -9,13 +9,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Execute Postman Collections
+      - name: Execute IPP Postman Collections
         uses: ./.github/workflows/actions/postman-run-collections
         with:
-          postman-collection: ipp.collection.json
-          postman-environment: ipp.qa.environment.json
+          collection: ipp.collection.json
+          environment: ipp.qa.environment.json
           report-filename: ipp-api-report
           api-key: "TESTSETEST"
           cf-client: "TESTCFCLIENT"
           cf-password: "TESTCFPASSWORD"
+
+      - name: Execute Create Postman Collections
+        uses: ./.github/workflows/actions/postman-run-collections
+        with:
+          collection: ./create/create.collection.json
+          environment: ./create/create.mig.environment.json
+          datasource: ./create/create.datasource.json
+          folder: "GET - Basic Tests"
+          report-filename: create-api-report
+          api-key: ${{secrets.APIKEY}}
+          cf-client: "TESTCFCLIENT"
+
 

@@ -1,0 +1,33 @@
+{
+	"id": "08ce7219-57c6-4825-aa6e-858efe38c07e",
+	"name": "Cloudflare - Create Mig",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "https://create-mig.on-norm.at",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "api-key",
+			"value": "vNKQRRoCNUNp8JvhYGnsgEdQXIBg2sWg9jx8roExuM4Uz8JZDn7PeJsh1oTlbxYG",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "bulk-api-ley",
+			"value": "vNKQRRoCNUNp8JvhYGnsgEdQXIBg2sWg9jx8roExuM4Uz8JZDn7PeJsh1oTlbxYG",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "elasticURL",
+			"value": "https://2c50d8f24efb45329e48fdc373315e9c.westeurope.azure.elastic-cloud.com:443",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-06-11T12:14:04.213Z",
+	"_postman_exported_using": "Postman/11.49.1"
+}

@@ -1,0 +1,964 @@
+{
+	"info": {
+		"_postman_id": "718003a3-7926-4de8-a5bd-bc6519b8a69f",
+		"name": "1. Automated Test Suite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44617731",
+		"_collection_link": "https://alinajelinek.postman.co/workspace/Alina-Jelinek's-Workspace~e2028110-3676-4c66-85ce-949ec0842d43/collection/44617731-718003a3-7926-4de8-a5bd-bc6519b8a69f?action=share&source=collection_link&creator=44617731"
+	},
+	"item": [
+		{
+			"name": "Other automated tests",
+			"item": [
+				{
+					"name": "Predecessor/Successor Automated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"if (pm.response.code !== 200) {",
+									"    console.warn(\"Stopping further tests due to unexpected status code:\", pm.response.code);",
+									"    return;",
+									"}",
+									"",
+									"pm.test(\"Check successors and predecessors fields\", function () {",
+									"    let jsonData = pm.response.json();",
+									" ",
+									"    // Check if successors field exists",
+									"pm.expect(jsonData).to.have.property(\"successors\");",
+									" ",
+									"    // Check if predecessors field exists",
+									"pm.expect(jsonData).to.have.property(\"predecessors\");",
+									" ",
+									"    // Log contents if not empty",
+									"    if (jsonData.successors && jsonData.successors.length > 0) {",
+									"        console.log(\"Successors:\", jsonData.successors);",
+									"    }",
+									" ",
+									"    if (jsonData.predecessors && jsonData.predecessors.length > 0) {",
+									"        console.log(\"Predecessors:\", jsonData.predecessors);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "X-API-KEY",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/internal/document-issues/{{DOC_KEY}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"internal",
+								"document-issues",
+								"{{DOC_KEY}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									},
+									{
+										"key": "X-API-KEY",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issue",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "docKey",
+											"value": "<long>",
+											"description": "(Required) "
+										},
+										{
+											"key": "language",
+											"value": "de"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Test for abstracts Automated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"if (pm.response.code !== 200) {",
+									"    console.warn(\"Stopping further tests due to unexpected status code:\", pm.response.code);",
+									"    return;",
+									"}",
+									"",
+									"",
+									"/* //here we would require abstract to have a language",
+									"",
+									"pm.test(\"Validate 'abstracts' languages: only 'en' or 'de', and log them\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    // Ensure 'abstracts' exists and is an array",
+									"    pm.expect(jsonData).to.have.property(\"abstracts\").that.is.an(\"array\");",
+									"",
+									"    const abstracts = jsonData.abstracts;",
+									"",
+									"    // Extract all languages",
+									"    const languages = abstracts.map(item => item.language);",
+									"    console.log(\"Languages found in 'abstracts':\", languages);",
+									"",
+									"    // Check for at least one valid language",
+									"    const hasValidLanguage = languages.some(lang => lang === \"en\" || lang === \"de\");",
+									"    pm.expect(hasValidLanguage).to.be.true;",
+									"",
+									"    // Ensure all languages are either 'en' or 'de'",
+									"    const hasOnlyValidLanguages = languages.every(lang => lang === \"en\" || lang === \"de\");",
+									"    pm.expect(hasOnlyValidLanguages).to.be.true;",
+									"});",
+									"",
+									"*/",
+									"",
+									"",
+									"pm.test(\"Validate 'abstracts' languages: if present, must be 'en' or 'de'\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    // Ensure 'abstracts' exists and is an array",
+									"    pm.expect(jsonData).to.have.property(\"abstracts\").that.is.an(\"array\");",
+									"",
+									"    const abstracts = jsonData.abstracts;",
+									"",
+									"    // Extract all languages that are defined",
+									"    const languages = abstracts",
+									"        .filter(item => item.language !== undefined)",
+									"        .map(item => item.language);",
+									"",
+									"    console.log(\"Languages found in 'abstracts':\", languages);",
+									"",
+									"    // Check that all defined languages are either 'en' or 'de'",
+									"    const allLanguagesValid = languages.every(lang => lang === \"en\" || lang === \"de\");",
+									"    pm.expect(allLanguagesValid).to.be.true;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "X-API-KEY",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/internal/document-issues/{{DOC_KEY}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"internal",
+								"document-issues",
+								"{{DOC_KEY}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									},
+									{
+										"key": "X-API-KEY",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issue",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "docKey",
+											"value": "<long>",
+											"description": "(Required) "
+										},
+										{
+											"key": "language",
+											"value": "de"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Test for gremKey Automated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"if (pm.response.code !== 200) {",
+									"    console.warn(\"Stopping further tests due to unexpected status code:\", pm.response.code);",
+									"    return;",
+									"}",
+									"",
+									"// This Test is sucessful if response body contains \"gremKey\"",
+									"",
+									"pm.test(\"Check if 'gremKey' exists under 'committee' (if committee is not null)\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    if (jsonData.committee !== null && jsonData.committee !== undefined) {",
+									"        pm.expect(jsonData.committee).to.have.property(\"gremKey\");",
+									"        console.log(\"gremKey:\", jsonData.committee.gremKey);",
+									"    } else {",
+									"        console.log(\"'committee' is null or undefined\");",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "X-API-KEY",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/internal/document-issues/{{DOC_KEY}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"internal",
+								"document-issues",
+								"{{DOC_KEY}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									},
+									{
+										"key": "X-API-KEY",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issue",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "docKey",
+											"value": "<long>",
+											"description": "(Required) "
+										},
+										{
+											"key": "language",
+											"value": "de"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Detail API",
+			"item": [
+				{
+					"name": "GET - Basic Tests",
+					"item": [
+						{
+							"name": "document-Issues",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"  pm.response.to.be.json;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issues/{{DOC_KEY}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issues",
+										"{{DOC_KEY}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											},
+											{
+												"key": "X-API-KEY",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"internal",
+												"document-issue",
+												"detail"
+											],
+											"query": [
+												{
+													"key": "docKey",
+													"value": "<long>",
+													"description": "(Required) "
+												},
+												{
+													"key": "language",
+													"value": "de"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+								}
+							]
+						},
+						{
+							"name": "document-Issues/bulk",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"  pm.response.to.be.json;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issues/bulk?pageSize=50&page=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issues",
+										"bulk"
+									],
+									"query": [
+										{
+											"key": "pageSize",
+											"value": "50"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											},
+											{
+												"key": "X-API-KEY",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"internal",
+												"document-issue",
+												"detail"
+											],
+											"query": [
+												{
+													"key": "docKey",
+													"value": "<long>",
+													"description": "(Required) "
+												},
+												{
+													"key": "language",
+													"value": "de"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "GET - Negative Tests",
+					"item": []
+				},
+				{
+					"name": "GET - Schema Validation Tests",
+					"item": [
+						{
+							"name": "Document-Issues Schema validation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"",
+											"",
+											"if (pm.response.code === 200) {",
+											"    // Only run this block if response is 200",
+											"   ",
+											" const schema = {",
+											"  type: \"object\",",
+											"  required: [",
+											"    \"docKey\", ",
+											"    \"docNumber\", ",
+											"    \"docNumberIssueDate\", ",
+											"    \"publication\", ",
+											"    \"publicationDate\", ",
+											"    \"withdrawal\", ",
+											"    \"withdrawalDate\", ",
+											"    \"successors\", ",
+											"    \"predecessors\", ",
+											"    \"validity\", ",
+											"    \"titles\", ",
+											"    \"abstracts\", ",
+											"    \"docStatus\", ",
+											"    \"committee\",",
+											"    \"ics\", ",
+											"    \"publisher\", ",
+											"    \"publications\"",
+											"  ],",
+											"  additionalProperties: false,",
+											"  properties: {",
+											"    docKey: { type: \"number\" },",
+											"    docNumber: { type: \"string\" },",
+											"    docNumberIssueDate: { type: \"string\" },",
+											"    publication: { type: \"string\" },",
+											"    publicationDate: { type: \"string\", format: \"date\" },",
+											"    withdrawal: { type: [\"null\", \"string\"] },",
+											"    withdrawalDate: { type: [\"null\", \"string\"], format: \"date\" },",
+											"    successors: { type: \"array\", properties: { docKey: { type: \"number\" }, docNumberIssueDate: { type: \"string\" } } },",
+											"    predecessors: { type: \"array\", items: { type: \"object\", properties: { docKey: { type: \"number\" }, docNumberIssueDate: { type: \"string\" } } } },",
+											"    validity: { type: \"boolean\" },",
+											"    titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } },",
+											"    abstracts: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } },",
+											"    docStatus: { type: \"string\" },",
+											"    committee: { type: [\"object\", \"null\"], properties: { displayName: { type: \"string\" }, ",
+											"        titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } } },",
+											"        gremKey: { type: \"number\" }",
+											"    },",
+											"    ics: { type: \"array\", items: { type: \"object\", properties: { code: { type: \"string\" }, titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } } }, required: [\"code\", \"titles\"] } },",
+											"    publisher: { type: \"string\" },",
+											"    publications: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, path: { type: \"string\" }, format: { type: \"string\" }, storage: { type: \"string\" } }, required: [\"language\", \"path\", \"format\", \"storage\"] } }",
+											"    },",
+											"};",
+											"",
+											"/* ",
+											"//Different way to validate the schema, also returns more detailed error report. Will have to look at this later.",
+											"const Ajv = require('ajv');",
+											"const ajv = new Ajv({ allErrors: true });",
+											"const validate = ajv.compile(schema);",
+											"const data = pm.response.json();",
+											"",
+											"const valid = validate(data);",
+											"",
+											"// 3. Run the test and log errors if any",
+											"pm.test(\"Schema is valid\", function () {",
+											"    if (!valid) {",
+											"        console.log(\"Schema validation errors:\", validate.errors);",
+											"    }",
+											"    pm.expect(valid, \"Schema validation failed\").to.be.true;",
+											"});",
+											"*/",
+											"",
+											"",
+											"pm.test(\"Schema is valid\", function () {",
+											"  pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"",
+											"} else {",
+											"    console.log(\"Schema validation skipped: Response code was \" + pm.response.code);",
+											"    pm.test.skip(\"Skipped schema validation due to non-200 response\", function () {",
+											"        pm.expect(true).to.be.true; // Dummy test to show skip",
+											"    });",
+											"}",
+											"",
+											"",
+											"/*",
+											"const schema = {",
+											"  type: \"object\",",
+											"  required: [",
+											"    \"docKey\", ",
+											"    \"docNumber\", ",
+											"    \"docNumberIssueDate\", ",
+											"    \"publication\", ",
+											"    \"publicationDate\", ",
+											"    \"withdrawal\", ",
+											"    \"withdrawalDate\", ",
+											"    \"successors\", ",
+											"    \"predecessors\", ",
+											"    \"validity\", ",
+											"    \"titles\", ",
+											"    \"abstracts\", ",
+											"    \"docStatus\", ",
+											"    \"committee\", ",
+											"    \"ics\", ",
+											"    \"publisher\", ",
+											"    \"publications\"",
+											"  ],",
+											"  properties: {",
+											"    docKey: { type: \"number\" },",
+											"    docNumber: { type: \"string\" },",
+											"    docNumberIssueDate: { type: \"string\" },",
+											"    publication: { type: \"string\" },",
+											"    publicationDate: { type: \"string\", format: \"date\" },",
+											"    withdrawal: { type: [\"null\", \"string\"] },",
+											"    withdrawalDate: { type: [\"null\", \"string\"], format: \"date\" },",
+											"    successor: { type: \"object\", properties: { docKey: { type: \"number\" }, docNumberIssueDate: { type: \"string\" } } },",
+											"    predecessors: { type: \"array\", items: { type: \"object\", properties: { docKey: { type: \"number\" }, docNumberIssueDate: { type: \"string\" } } } },",
+											"    validity: { type: \"boolean\" },",
+											"    titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } },",
+											"    abstracts: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } },",
+											"    docStatus: { type: \"string\" },",
+											"    committee: { type: [\"object\", \"null\"], properties: { displayName: { type: \"string\" }, ",
+											"        titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } } },",
+											"        gremKey: { type: \"number\" }",
+											"    },",
+											"    ics: { type: \"array\", items: { type: \"object\", properties: { code: { type: \"string\" }, titles: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, value: { type: \"string\" } }, required: [\"language\", \"value\"] } } }, required: [\"code\", \"titles\"] } },",
+											"    publisher: { type: \"string\" },",
+											"    publications: { type: \"array\", items: { type: \"object\", properties: { language: { type: \"string\" }, path: { type: \"string\" }, format: { type: \"string\" }, storage: { type: \"string\" } }, required: [\"language\", \"path\", \"format\", \"storage\"] } }",
+											"    },",
+											"};",
+											"",
+											"",
+											"",
+											"pm.test(\"Schema is valid\", function () {",
+											"  pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"*/"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/internal/document-issues/{{DOC_KEY}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"internal",
+										"document-issues",
+										"{{DOC_KEY}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											},
+											{
+												"key": "X-API-KEY",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/internal/document-issue/detail?docKey=<long>&language=de",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"internal",
+												"document-issue",
+												"detail"
+											],
+											"query": [
+												{
+													"key": "docKey",
+													"value": "<long>",
+													"description": "(Required) "
+												},
+												{
+													"key": "language",
+													"value": "de"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"docKey\": \"<long>\",\n  \"docNumber\": \"<string>\",\n  \"publication\": \"<string>\",\n  \"publicationDate\": \"<date>\",\n  \"withdrawal\": \"<string>\",\n  \"withdrawalDate\": \"<date>\",\n  \"validity\": \"<boolean>\",\n  \"title\": \"<string>\",\n  \"docStatus\": \"<string>\",\n  \"committee\": {\n    \"displayName\": \"<string>\",\n    \"title\": \"<string>\"\n  },\n  \"ics\": [\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"publisher\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,25 +1,37 @@
 name: Run Postman Collection
 inputs:
-  postman-collection:
-    description: Postman Collection
+  collection:
+    description: Postman collection
     required: true
-  postman-environment:
-    description: Postman Collection Environment
+  environment:
+    description: Postman collection environment
     required: true
+  datasource:
+    description: Postman Data Source for running collections (optional)
+    required: false
+    default: ""
+  folder:
+    description: Postman collection folder to run (optional)
+    required: false
+    default: ""
   report-filename:
-    description: Filename of the Report
+    description: Filename of the report
     required: true
     default: report
+  report-directory:
+    description: Directory to store the report (optional)
+    required: false
+    default: reports
   api-key:
     description: Postman API Key (optional)
     required: false
     default: ""
   cf-client:
-    description: Cloudflare Client ID (optional)
+    description: Cloudflare client ID (optional)
     required: false
     default: ""
   cf-password:
-    description: Cloudflare Client Password (optional)
+    description: Cloudflare client password (optional)
     required: false
     default: ""
 
@@ -31,22 +43,32 @@ runs:
       shell: bash
 
     - name: Create Directory for Postman results
-      run: mkdir -p postmanResults
+      run: mkdir -p ${{inputs.report-directory}}
       shell: bash
 
     - name: Run collections
       run: |
         # Initial Command to run Newman with the provided inputs
-        newman_cmd="newman run ${{ inputs.postman-collection }} -e ${{ inputs.postman-environment }} -r cli,htmlextra --reporter-htmlextra-export postmanResults/${{ inputs.report-filename }}.html"
+        newman_cmd="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli,htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
         
-        # Append API key if provided
-        if [ "${{inputs.api-key}}" != "" ]; then
-          newman_cmd="$newman_cmd --env-var \"apiKey=${{inputs.api-key}}\""
+        # Apply Postman Datasource
+        if [ "${{inputs.datasource}}" != "" ]; then
+          newman_cmd="$newman_cmd --iteration-data ${{ inputs.datasource}}"
         fi
         
-        # Append Cloudflare Credentials if provided
+        # Apply Postman Folder
+        if [ "${{inputs.datasource}}" != "" ]; then
+          newman_cmd="$newman_cmd --folder ${{ inputs.folder}}"
+        fi
+        
+        # Apply API key
+        if [ "${{inputs.api-key}}" != "" ]; then
+          newman_cmd="$newman_cmd --env-var \"api-key=${{inputs.api-key}}\""
+        fi
+        
+        # Apply Cloudflare Credentials
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
-          newman_cmd="$newman_cmd --env-var \"cf_client=${{inputs.cf-client}}\" --env-var \"cf_password=${{inputs.cf-password}}\""
+          newman_cmd="$newman_cmd --env-var \"cf-client=${{inputs.cf-client}}\" --env-var \"cf-password=${{inputs.cf-password}}\""
         fi
 
         # Execute the Newman command
@@ -59,5 +81,5 @@ runs:
       if: always()
       with:
         name: ${{ inputs.report-filename }}
-        path: postmanResults/${{ inputs.report-filename }}.html
-        retention-days: 10
+        path: ${{inputs.report-directory}}/${{ inputs.report-filename }}.html
+        retention-days: 14
