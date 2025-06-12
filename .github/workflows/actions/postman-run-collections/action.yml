@@ -50,8 +50,7 @@ runs:
       run: pwd && ls create && ls reports
       shell: bash
 
-    - name: Build Newman command
-      id: build-newman-command
+    - name: Run collections
       run: |
         # Initial Command to run Newman with the provided inputs
         NEWMAN_CMD="newman run ${{ inputs.collection }} -e ${{ inputs.environment }} -r cli, htmlextra --reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
@@ -75,13 +74,6 @@ runs:
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
         NEWMAN_CMD="$NEWMAN_CMD --env-var \"cf-client=${{inputs.cf-client}}\" --env-var \"cf-password=${{inputs.cf-password}}\""
         fi
-        
-        echo "NEWMAN_CMD=$NEWMAN_CMD" >> $GITHUB_OUTPUT
-      shell: bash
-
-    - name: Run collections
-      run: |
-        NEWMAN_CMD=${{steps.build-newman-command.outputs.NEWMAN_CMD}}
         
         # Execute the Newman command
         echo "Execute Newman command: $NEWMAN_CMD"
