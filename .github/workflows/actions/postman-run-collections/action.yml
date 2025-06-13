@@ -62,7 +62,7 @@ runs:
         
         # Apply Postman Folder
         if [ "${{inputs.folder}}" != "" ]; then
-        NEWMAN_CMD="$NEWMAN_CMD --folder '${{ inputs.folder}}''"
+        NEWMAN_CMD="$NEWMAN_CMD --folder '${{ inputs.folder}}'"
         fi
         
         # Apply API key
