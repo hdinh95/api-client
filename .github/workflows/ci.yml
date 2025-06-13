@@ -34,7 +34,7 @@ jobs:
           collection: ./create/create.collection.json
           environment: ./create/create.mig.environment.json
           datasource: ./create/create.datasource.json
-          folder: "GET - Basic Tests"
+          folder: "Repeatable"
           report-filename: create-api-report
           api-key: ${{secrets.APIKEY}}
           cf-client: "TESTCFCLIENT"
