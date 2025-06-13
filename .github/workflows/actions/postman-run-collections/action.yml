@@ -61,7 +61,7 @@ runs:
         fi
         
         # Apply Postman Folder
-        if [ "${{inputs.datasource}}" != "" ]; then
+        if [ "${{inputs.folder}}" != "" ]; then
         NEWMAN_CMD="$NEWMAN_CMD --folder \"${{ inputs.folder}}\""
         fi
         
