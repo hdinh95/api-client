@@ -4,7 +4,7 @@
 	"values": [
 		{
 			"key": "baseUrl",
-			"value": "https://create-mig.on-norm.at",
+			"value": "https://create-test.austrian-standards.at",
 			"type": "default",
 			"enabled": true
 		},
