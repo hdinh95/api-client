@@ -62,17 +62,17 @@ runs:
         
         # Apply Postman Folder
         if [ "${{inputs.folder}}" != "" ]; then
-        NEWMAN_CMD="$NEWMAN_CMD --folder \"${{ inputs.folder}}\""
+        NEWMAN_CMD="$NEWMAN_CMD --folder '${{ inputs.folder}}''"
         fi
         
         # Apply API key
         if [ "${{inputs.api-key}}" != "" ]; then
-        NEWMAN_CMD="$NEWMAN_CMD --env-var \"api-key=${{inputs.api-key}}\""
+        NEWMAN_CMD="$NEWMAN_CMD --env-var 'api-key=${{inputs.api-key}}'"
         fi
         
         # Apply Cloudflare Credentials
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
-        NEWMAN_CMD="$NEWMAN_CMD --env-var \"cf-client=${{inputs.cf-client}}\" --env-var \"cf-password=${{inputs.cf-password}}\""
+        NEWMAN_CMD="$NEWMAN_CMD --env-var 'cf-client=${{inputs.cf-client}}' --env-var 'cf-password=${{inputs.cf-password}}'"
         fi
         
         # Execute the Newman command
