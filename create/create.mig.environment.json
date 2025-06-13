@@ -9,12 +9,6 @@
 			"enabled": true
 		},
 		{
-			"key": "api-key",
-			"value": "vNKQRRoCNUNp8JvhYGnsgEdQXIBg2sWg9jx8roExuM4Uz8JZDn7PeJsh1oTlbxYG",
-			"type": "default",
-			"enabled": true
-		},
-		{
 			"key": "bulk-api-ley",
 			"value": "vNKQRRoCNUNp8JvhYGnsgEdQXIBg2sWg9jx8roExuM4Uz8JZDn7PeJsh1oTlbxYG",
 			"type": "default",

@@ -1,0 +1,25 @@
+name: CREATE - Postman API Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Execute Create Postman Collections
+        uses: ./.github/workflows/actions/postman-run-collections
+        with:
+          collection: ./create/create.collection.json
+          environment: ./create/create.mig.environment.json
+          datasource: ./create/create.datasource.json
+          folder: "GET - Basic Tests"
+          report-filename: create-api-report
+          api-key: ${{secrets.APIKEY}}
+          cf-client: ${{secrets.CF_CLIENT}}
+          cf-secret: ${{secrets.CF_PW}}

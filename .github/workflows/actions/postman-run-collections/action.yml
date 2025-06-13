@@ -30,7 +30,7 @@ inputs:
     description: Cloudflare client ID (optional)
     required: false
     default: ""
-  cf-password:
+  cf-secret:
     description: Cloudflare client password (optional)
     required: false
     default: ""
@@ -78,10 +78,10 @@ runs:
         fi
         
         # Apply Cloudflare Credentials
-        if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
+        if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-secret}}" != "" ]; then
         NEWMAN_ARGS+=(
           "--env-var" "cf-client=${{inputs.cf-client}}" 
-          "--env-var" "cf-password=${{inputs.cf-password}}"
+          "--env-var" "cf-secret=${{inputs.cf-secret}}"
         )
         fi
         
