@@ -56,29 +56,33 @@ runs:
         declare -a NEWMAN_ARGS
         
         NEWMAN_ARGS=(
-          "run ${{ inputs.collection }}"
-          "-e ${{ inputs.environment }}"
-          "-r cli,htmlextra"
-          "--reporter-htmlextra-export ${{inputs.report-directory}}/${{ inputs.report-filename }}.html")
+          "run" "${{ inputs.collection }}"
+          "-e" "${{ inputs.environment }}"
+          "-r" "cli,htmlextra"
+          "--reporter-htmlextra-export" "${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
+        )
         
         # Apply Postman Datasource
         if [ "${{inputs.datasource}}" != "" ]; then
-        NEWMAN_ARGS+=("--iteration-data ${{ inputs.datasource}}")
+        NEWMAN_ARGS+=("--iteration-data" "${{ inputs.datasource}}")
         fi
         
         # Apply Postman Folder
         if [ "${{inputs.folder}}" != "" ]; then
-        NEWMAN_ARGS+=("--folder '${{ inputs.folder}}'")
+        NEWMAN_ARGS+=("--folder" "'${{ inputs.folder}}'")
         fi
         
         # Apply API key
         if [ "${{inputs.api-key}}" != "" ]; then
-        NEWMAN_ARGS+=("--env-var 'api-key=${{inputs.api-key}}'")
+        NEWMAN_ARGS+=("--env-var" "'api-key=${{inputs.api-key}}'")
         fi
         
         # Apply Cloudflare Credentials
         if [ "${{inputs.cf-client}}" != "" ] && [ "${{inputs.cf-password}}" != "" ]; then
-        NEWMAN_ARGS+=("--env-var 'cf-client=${{inputs.cf-client}}' --env-var 'cf-password=${{inputs.cf-password}}'")
+        NEWMAN_ARGS+=(
+          "--env-var" "'cf-client=${{inputs.cf-client}}'" 
+          "--env-var" "'cf-password=${{inputs.cf-password}}'"
+        )
         fi
         
         # Execute the Newman command
