@@ -449,7 +449,7 @@
 			"name": "Detail API",
 			"item": [
 				{
-					"name": "Repeatable",
+					"name": "GET - Basic Tests",
 					"item": [
 						{
 							"name": "document-Issues",
