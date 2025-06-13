@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "718003a3-7926-4de8-a5bd-bc6519b8a69f",
+		"_postman_id": "4b8e6490-5500-4aae-9ece-2642f0ee1b35",
 		"name": "1. Automated Test Suite",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "44617731",
-		"_collection_link": "https://alinajelinek.postman.co/workspace/Alina-Jelinek's-Workspace~e2028110-3676-4c66-85ce-949ec0842d43/collection/44617731-718003a3-7926-4de8-a5bd-bc6519b8a69f?action=share&source=collection_link&creator=44617731"
+		"_exporter_id": "12311253",
+		"_collection_link": "https://grey-satellite-631281.postman.co/workspace/Georg~d760512c-65f8-446c-bc23-cd3674cb1561/collection/12311253-4b8e6490-5500-4aae-9ece-2642f0ee1b35?action=share&source=collection_link&creator=12311253"
 	},
 	"item": [
 		{
@@ -449,7 +449,7 @@
 			"name": "Detail API",
 			"item": [
 				{
-					"name": "GET - Basic Tests",
+					"name": "Repeatable",
 					"item": [
 						{
 							"name": "document-Issues",
