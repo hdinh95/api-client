@@ -4,8 +4,17 @@ on:
   push:
     branches:
       - main
+  repository_dispatch:
+    types: [ipp-merge-pr]
 
 jobs:
+  pr-merge:
+    if: github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print PR Merge Event
+        run: echo "This job runs on PR merge events."
+
   ipp-test:
     runs-on: ubuntu-latest
     steps:
