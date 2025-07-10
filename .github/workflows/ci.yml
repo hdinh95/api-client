@@ -8,11 +8,13 @@ on:
     types: [ipp-merge-pr]
   workflow_dispatch:
 
-run-name: IPP - Postman API Tests ${{ github.event.client_payload.pr_name }}
-
+run-name: >-
+  IPP - Postman API Tests 
+  ${{ github.event_name == 'repository_dispatch' && format(': {0}', github.event.client_payload.pr_title) || format('not working') }}
 
 jobs:
   pr-merge:
+    if: github.event_name == 'repository_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
