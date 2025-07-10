@@ -19,6 +19,6 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Print PR Merge Event
-        run: echo "This job runs on PR merge events."
+        run: echo "This job runs on PR merge events. ${{ github.event.client_payload.pr_name }}"
 
 
