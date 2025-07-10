@@ -10,7 +10,8 @@ on:
 
 run-name: >-
   IPP - Postman API Tests 
-  ${{ github.event_name == 'repository_dispatch' && format(': {0}', github.event.client_payload.pr_title) || format('not working') }}
+  ${{ github.event_name == 'repository_dispatch' && format(': ') }}
+  ${{ github.event.client_payload.pr_title }}
 
 jobs:
   pr-merge:
