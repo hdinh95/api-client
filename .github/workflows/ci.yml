@@ -15,7 +15,6 @@ run-name: >-
 
 jobs:
   pr-merge:
-    if: github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
