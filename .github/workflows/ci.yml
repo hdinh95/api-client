@@ -9,7 +9,6 @@ on:
   workflow_dispatch:
 
 run-name: >-
-  IPP - Postman API Tests 
   ${{ github.event_name == 'repository_dispatch' && format('Pull Request ({0})', github.event.client_payload.pr_name) 
       || github.event_name == 'workflow_dispatch' && format('Start API Tests (Manual)') 
       || format('Start API Tests') }}
