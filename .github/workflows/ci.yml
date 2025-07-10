@@ -10,7 +10,7 @@ on:
 
 run-name: >-  
   IPP - Postman API Tests 
-  ${{ github.event.name == 'repository_dispatch' && format(': {0}', github.event.client_payload.pr_name) || format('') }}
+  ${{ github.event.name == 'repository_dispatch' && format(': {0}', github.event.client_payload.pr_name) || format('not working') }}
 
 
 jobs:
