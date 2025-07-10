@@ -6,6 +6,7 @@ on:
       - main
   repository_dispatch:
     types: [ipp-merge-pr]
+  workflow_dispatch:
 
 run-name: API Tests for ${{ github.event.client_payload.pr_name }} 
 
@@ -19,6 +20,6 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Print PR Merge Event
-        run: echo "This job runs on PR merge events. ${{ github.event.client_payload.pr_name }}"
+        run: echo "PR Title ${{ github.event.client_payload.pr_name }}"
 
 
