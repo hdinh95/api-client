@@ -8,7 +8,9 @@ on:
     types: [ipp-merge-pr]
   workflow_dispatch:
 
-run-name: API Tests for ${{ github.event.client_payload.pr_name }} 
+run-name: >-  
+  IPP - Postman API Tests 
+  ${{ github.event.name == 'repository_dispatch' && format(': {0}', github.event.client_payload.pr_name) || format('') }}
 
 
 jobs:
