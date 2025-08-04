@@ -22,20 +22,3 @@ runs:
        if: always()
        shell: bash
        run: echo ${{ inputs.reports }} | jq .name
-
-#    - name: Publish Test Report to Jira
-#      shell: bash
-#      if: always()
-#      run: |
-#        curl --request POST \
-#             --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/${{ inputs.ticket }}/comment' \
-#             --user '${{ inputs.jira_user_email }}:${{ inputs.jira_user_api_token }}' \
-#             --header 'Accept: application/json' \
-#             --header 'Content-Type: application/json' \
-#             --data '{
-#               "body": "Test-Report:  \nBackend Feature (${{ inputs.project_name }}): https://${{ env.CONTAINER_APP_FQDN }}",
-#               "visibility": {
-#                 "type": "role",
-#                 "value": "Members"
-#               }
-#             }'
