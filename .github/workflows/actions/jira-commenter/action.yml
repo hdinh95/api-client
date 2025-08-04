@@ -19,6 +19,7 @@ runs:
   using: composite
   steps:
      - name: Print json
+       if: always()
        shell: bash
        run: echo ${{ inputs.reports }} | jq .name
 
