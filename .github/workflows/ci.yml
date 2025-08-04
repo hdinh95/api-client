@@ -45,7 +45,7 @@ jobs:
           
           report=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: $succeeded}')
           
-          echo "Generated Report JSON: report"
+          echo "Generated Report JSON: $report"
           echo "report=$report" >> $GITHUB_OUTPUT
           
 
@@ -53,7 +53,7 @@ jobs:
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
-          reports: '${{ steps.build_report.outputs.report }}'
+          reports: '${{ toJSON(steps.build_report.outputs.report) }}'
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
