@@ -5,7 +5,8 @@ inputs:
     required: true
   environment:
     description: Postman collection environment
-    required: true
+    required: false
+    default: ""
   datasource:
     description: Postman Data Source for running collections (optional)
     required: false
@@ -35,6 +36,13 @@ inputs:
     required: false
     default: ""
 
+outputs:
+  report:
+    description: |
+      "A object containing, the collection name, the url to the report, and if the collection was successful. 
+      { name: string, report_url: string, success: boolean }"
+    value: ${{ steps.build_report_output.outputs.report }}
+
 runs:
   using: "composite"
   steps:
@@ -46,30 +54,29 @@ runs:
       run: mkdir -p ${{inputs.report-directory}}
       shell: bash
 
-    - name: Log
-      run: pwd && ls
-      shell: bash
-
     - name: Run collections
+      id: run_collections
       run: |
         # Initial Command to run Newman with the provided inputs
         declare -a NEWMAN_ARGS
         
         NEWMAN_ARGS=(
-          "run" "${{ inputs.collection }}"
-          "-e" "${{ inputs.environment }}"
+          "run" "${{inputs.collection}}"
+          "-e" "${{inputs.environment}}"
           "-r" "cli,htmlextra"
-          "--reporter-htmlextra-export" "${{inputs.report-directory}}/${{ inputs.report-filename }}.html"
+          "--reporter-htmlextra-export" "${{inputs.report-directory}}/${{inputs.report-filename}}.html"
+          "--reporter-htmlextra-omitHeaders"
+          "--reporter-htmlextra-omitResponseBodies"
         )
         
         # Apply Postman Datasource
         if [ "${{inputs.datasource}}" != "" ]; then
-        NEWMAN_ARGS+=("--iteration-data" "${{ inputs.datasource}}")
+        NEWMAN_ARGS+=("--iteration-data" "${{inputs.datasource}}")
         fi
         
         # Apply Postman Folder
         if [ "${{inputs.folder}}" != "" ]; then
-        NEWMAN_ARGS+=("--folder" "${{ inputs.folder}}")
+        NEWMAN_ARGS+=("--folder" "${{inputs.folder}}")
         fi
         
         # Apply API key
@@ -86,19 +93,26 @@ runs:
         fi
         
         # Execute the Newman command
-        echo "Execute Newman command newman ${NEWMAN_ARGS[*]}"
+        echo "Execute Command: newman ${NEWMAN_ARGS[*]}"
         newman "${NEWMAN_ARGS[@]}"
       shell: bash
 
-    - name: Log
-      if: always()
-      run: ls reports
-      shell: bash
-
     - name: Upload Report
+      id: upload_report
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: ${{ inputs.report-filename }}
-        path: ${{inputs.report-directory}}/${{ inputs.report-filename }}.html
-        retention-days: 14
+        name: ${{inputs.report-filename}}
+        path: ${{inputs.report-directory}}/${{inputs.report-filename}}.html
+        retention-days: 7
+
+    - name: Build Report Output
+      id: build_report_output
+      if: always()
+      shell: bash
+      run: |
+        echo "${{ steps.upload_report.outputs.artifact-url }}"
+        report=$(jq -cn --arg succeeded "${{ steps.run_collections.outcome }}" '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: ($succeeded == "true")}')
+        
+        echo "Generated Report JSON: $report"
+        echo "report=$report" >> $GITHUB_OUTPUT

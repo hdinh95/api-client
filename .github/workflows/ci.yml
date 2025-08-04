@@ -20,9 +20,37 @@ jobs:
           echo "Failed API Tests"
           exit 1
 
+  api-tests:
+    name: Data-Driven API Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - folder: "basic"
+            report-filename: positive-report
+          - folder: "fail"
+            report-filename: negative-report
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Execute Postman Collections
+        id: postman_run
+        uses: ./.github/workflows/actions/postman-run-collections
+        with:
+          collection: ./create/dog.collection.json
+          folder: ${{matrix.folder}}
+          report-filename: ${{matrix.report-filename}}
+
+      - name: Use Output
+        run: |
+          echo "Postman Run Output: ${{ steps.postman_run.outputs.report }}"
+        
+
   post-comment:
     needs:
-      - pr-merge
+      - api-tests
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -34,7 +62,7 @@ jobs:
         run: |
           echo "This step is intentionally failing"
           exit 1
-      
+
       - name: Build Report
         id: build_report
         if: always()
