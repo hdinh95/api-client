@@ -20,11 +20,17 @@ jobs:
           echo "Failed API Tests"
           exit 1
 
+  post-comment:
+    needs:
+      - pr-merge
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
-          reports: '{"name": "Example Report","report-url": "https://example.com/report"}'
+          reports: ${{ github.event.client_payload.reports }}
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
