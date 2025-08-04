@@ -21,4 +21,4 @@ runs:
      - name: Print json
        if: always()
        shell: bash
-       run: echo ${{ inputs.reports }} | jq .name
+       run: echo `${{ inputs.reports }}` | jq .name
