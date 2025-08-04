@@ -3,7 +3,7 @@ description: "Post comment to Jira issues containing test results and report url
 
 inputs:
   reports:
-    description: An array of reports urls
+    description: An array of reports urls objects
     required: true
   ticket:
     description: "Consists of the ticket abbreviation and key. e.g. ITU-269"
@@ -18,11 +18,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Post Comment to Jira
-      shell: bash
-      run: echo "Test"
-
     - name: Print json
-      if: always()
       shell: bash
       run: echo `${{ inputs.reports }}` | jq .name

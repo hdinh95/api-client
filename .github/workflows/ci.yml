@@ -26,14 +26,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Echo
+      - name: Fail on Purpose
+        id: fail_step
         run: |
-          echo '${{ toJSON(github.event.client_payload.reports) }}'
+          echo "This step is intentionally failing"
+          exit 1
+      
+      - name: Get Outcome from failed
+        if: always()
+        run: |
+          echo "Outcome: ${{ steps.fail_step.outcome }}"
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
+        if: always()
         with:
           reports: '${{ toJSON(github.event.client_payload.reports) }}'
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
+          example_var_name: test
