@@ -47,7 +47,7 @@ jobs:
                           --arg succeded $outcome \ 
                           '{name: "Data-Driven API Tests", url: "https://example.com/report", succeded: $succeded}')
           
-          echo "report: $REPORT" >> GITHUB_OUTPUT
+          echo "report=$REPORT" >> GITHUB_OUTPUT
           
 
       - name: Post Comment on Jira
@@ -58,4 +58,3 @@ jobs:
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
-          example_var_name: test
