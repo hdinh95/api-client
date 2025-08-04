@@ -20,8 +20,8 @@ runs:
   steps:
     - name: Print reports
       shell: bash
-      run: echo `${{ inputs.reports }}`
+      run: echo '${{ inputs.reports }}'
 
     - name: Print json
       shell: bash
-      run: echo `${{ inputs.reports }}` | jq .name
+      run: echo '${{ inputs.reports }}'' | jq .name
