@@ -111,8 +111,7 @@ runs:
       if: always()
       shell: bash
       run: |
-        echo "${{ steps.upload_report.outputs.artifact-url }}"
-        report=$(jq -cn --arg succeeded "${{ steps.run_collections.outcome }}" '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: ($succeeded == "true")}')
+        report=$(jq -cn --arg succeeded "${{ steps.run_collections.outcome }}" '{name: "Data-Driven API Tests", url: "${{ steps.upload_report.outputs.artifact-url }} ", succeeded: ($succeeded == "true")}')
         
         echo "Generated Report JSON: $report"
         echo "report=$report" >> $GITHUB_OUTPUT
