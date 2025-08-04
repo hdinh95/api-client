@@ -52,6 +52,7 @@ jobs:
           echo "report=$report" >> $GITHUB_OUTPUT
 
       - name: Print report
+        if: always()
         run: |
           echo "Report: ${{ steps.build_report.outputs.report }}"
           
