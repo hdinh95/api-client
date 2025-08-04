@@ -55,7 +55,7 @@ jobs:
         if: always()
         run: |
           echo "Report: ${{ steps.build_report.outputs.report }}"
-          
+          echo "Report: ${{ steps.build_report.outputs.report }}"
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
