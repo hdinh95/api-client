@@ -44,6 +44,7 @@ jobs:
           report-filename: ${{matrix.report-filename}}
 
       - name: Use Output
+        if: always()
         run: |
           echo "Postman Run Output: ${{ steps.postman_run.outputs.report }}"
         
