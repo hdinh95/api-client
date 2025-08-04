@@ -54,8 +54,8 @@ jobs:
       - name: Print report
         if: always()
         run: |
-          echo "Report: ${{ steps.build_report.outputs.report }}"
-          echo "Report: ${{ steps.build_report.outputs.report }}"
+          echo "Report: ${{ toJSON(steps.build_report.outputs.report) }}"
+          echo "Report: ${{ fromJSON(steps.build_report.outputs.report) }}"
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
