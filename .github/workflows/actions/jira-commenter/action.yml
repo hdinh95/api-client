@@ -1,0 +1,40 @@
+name: Post Jira Comment
+description: "Post comment to Jira issues containing test results and report urls"
+
+inputs:
+  reports:
+    description: An array of reports urls
+    required: true
+  ticket:
+    description: "Consists of the ticket abbreviation and key. e.g. ITU-269"
+    required: true
+  jira_user_email:
+    description: "The email of the Jira user for publishing the deployment URL"
+    required: true
+  jira_user_api_token:
+    description: "The api token from the Jira user used for authentication to Jira"
+    required: true
+
+runs:
+  using: composite
+  steps:
+     - name: Print json
+       shell: bash
+       run: echo ${{ inputs.reports }} | jq .name
+
+#    - name: Publish Test Report to Jira
+#      shell: bash
+#      if: always()
+#      run: |
+#        curl --request POST \
+#             --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/${{ inputs.ticket }}/comment' \
+#             --user '${{ inputs.jira_user_email }}:${{ inputs.jira_user_api_token }}' \
+#             --header 'Accept: application/json' \
+#             --header 'Content-Type: application/json' \
+#             --data '{
+#               "body": "Test-Report:  \nBackend Feature (${{ inputs.project_name }}): https://${{ env.CONTAINER_APP_FQDN }}",
+#               "visibility": {
+#                 "type": "role",
+#                 "value": "Members"
+#               }
+#             }'
