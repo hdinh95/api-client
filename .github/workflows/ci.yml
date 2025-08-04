@@ -32,16 +32,29 @@ jobs:
           echo "This step is intentionally failing"
           exit 1
       
-      - name: Get Outcome from failed
+      - name: Build Report
+        id: build_report
         if: always()
         run: |
+          declare OUTCOME=false 
+          
           echo "Outcome: ${{ steps.fail_step.outcome }}"
+          if [ "${{ steps.fail_step.outcome }}" == 'success' ]; then
+            OUTCOME=true
+          fi
+          
+          REPORT = $(jq -n \
+                          --arg succeded $outcome \ 
+                          '{name: "Data-Driven API Tests", url: "https://example.com/report", succeded: $succeded}')
+          
+          echo "report: $REPORT" >> GITHUB_OUTPUT
+          
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
-          reports: '${{ toJSON(github.event.client_payload.reports) }}'
+          reports: '${{ steps.build_report.outputs.report }}'
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'

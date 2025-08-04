@@ -18,6 +18,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Print reports
+      shell: bash
+      run: echo `${{ inputs.reports }}`
+
     - name: Print json
       shell: bash
       run: echo `${{ inputs.reports }}` | jq .name
