@@ -36,16 +36,17 @@ jobs:
         id: build_report
         if: always()
         run: |
-          declare OUTCOME=false 
+          declare outcome=false 
           
           echo "Outcome: ${{ steps.fail_step.outcome }}"
           if [ "${{ steps.fail_step.outcome }}" == 'success' ]; then
-            OUTCOME=true
+            outcome=true
           fi
           
-          REPORT=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: $succeeded}')
+          report=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: $succeeded}')
           
-          echo "report=$REPORT" >> $GITHUB_OUTPUT
+          echo "Generated Report JSON: report"
+          echo "report=$report" >> $GITHUB_OUTPUT
           
 
       - name: Post Comment on Jira
