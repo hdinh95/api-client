@@ -24,4 +24,4 @@ runs:
 
     - name: Print json
       shell: bash
-      run: echo '${{ inputs.reports }}'' | jq .name
+      run: echo '${{ inputs.reports }}' | jq .name
