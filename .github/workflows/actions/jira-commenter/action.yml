@@ -18,7 +18,11 @@ inputs:
 runs:
   using: composite
   steps:
-     - name: Print json
-       if: always()
-       shell: bash
-       run: echo `${{ inputs.reports }}` | jq .name
+    - name: Post Comment to Jira
+      shell: bash
+      run: echo "Test"
+
+    - name: Print json
+      if: always()
+      shell: bash
+      run: echo `${{ inputs.reports }}` | jq .name
