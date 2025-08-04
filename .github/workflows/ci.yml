@@ -43,17 +43,21 @@ jobs:
             outcome=true
           fi
           
-          report=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: $succeeded}')
+          report=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: ($succeeded == "true")}')
           
           echo "Generated Report JSON: $report"
           echo "report=$report" >> $GITHUB_OUTPUT
+
+      - name: Print report
+        run: |
+          echo "Report: ${{ steps.build_report.outputs.report }}"
           
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
-          reports: '${{ toJSON(steps.build_report.outputs.report) }}'
+          reports: '${{ steps.build_report.outputs.report }}'
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
