@@ -1,9 +1,7 @@
 name: IPP - Postman API Tests
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   ipp-test:
