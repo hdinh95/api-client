@@ -39,7 +39,7 @@ jobs:
         id: postman_run
         uses: ./.github/workflows/actions/postman-run-collections
         with:
-          collection: ./create/dog.collection.json
+          collection: ./dog.collection.json
           folder: ${{matrix.folder}}
           report-filename: ${{matrix.report-filename}}
 
