@@ -22,6 +22,7 @@ jobs:
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
+        if: always()
         with:
           reports: '{"name": "Example Report","report-url": "https://example.com/report"}.'
           jira_user_api_token: 'api-token'
