@@ -43,11 +43,9 @@ jobs:
             OUTCOME=true
           fi
           
-          REPORT = $(jq -n \
-                          --arg succeded $outcome \ 
-                          '{name: "Data-Driven API Tests", url: "https://example.com/report", succeded: $succeded}')
+          REPORT=$(jq -n --arg succeeded $outcome '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: $succeeded}')
           
-          echo "report=$REPORT" >> GITHUB_OUTPUT
+          echo "report=$REPORT" >> $GITHUB_OUTPUT
           
 
       - name: Post Comment on Jira
