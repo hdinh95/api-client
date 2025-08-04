@@ -31,12 +31,12 @@ jobs:
 
       - name: Echo
         run: |
-          echo ${{ fromJSON(github.event.client_payload.reports) }}
+          echo ${{ toJSON(github.event.client_payload.reports) }}
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
         with:
-          reports: ${{ fromJSON(github.event.client_payload.reports) }}
+          reports: ${{ toJSON(github.event.client_payload.reports) }}
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
