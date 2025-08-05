@@ -21,43 +21,33 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Print reports
-      shell: bash
-      run: |
-        echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
-          echo "---------------------------"  
-          echo "Full JSON object: $entry"
-          
-          name=$(echo "$entry" | jq -r '.name')
-          url=$(echo "$entry" | jq -r '.reportUrl')
-          succeeded=$(echo "$entry" | jq -r '.succeeded')
-          
-          echo "Name: $name"
-          echo "URL: $url"
-          echo "Succeeded: $succeeded"
-        done
-
-    - name: Build Jira API Request Body
-      id: build-jira-api-request-body
+    - name: Build Jira API Payload
+      id: build-jira-api-payload
       if: always()
       shell: bash
       run: |
-        requestBody="${{ inputs.project-name }} API-Test-Report:"
+        comment="${{ inputs.project-name }} API-Test-Report:"
         
-        echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
+        echo '${{ inputs.reports }}' | jq -c '.[]' | while IFS= read -r entry; do
           name=$(echo "$entry" | jq -r '.name')
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
         
-          echo "Name: $name"
-          echo "URL: $url"
-          echo "Succeeded: $succeeded"
-        
-          requestBody+="\n $name:$succeeded - $url"
+          comment+="\n$name:$succeeded - $url"
         done
         
-        echo "$requestBody"
-        echo "requestBody=$requestBody" >> $GITHUB_OUTPUT
+        jiraPayload=$(jq -n -c \
+          --arg bodyContent "comment" \
+          '{
+            body: $bodyContent,
+            visibility: {
+              type: "role",
+              value: "Members"
+            }
+          }')
+        
+        echo $jiraPayload
+        echo "jiraPayload=$jiraPayload" >> $GITHUB_OUTPUT
 
     - name: Publish Jira Comment
       shell: bash
@@ -69,7 +59,7 @@ runs:
                --header 'Accept: application/json' \
                --header 'Content-Type: application/json' \
                --data '{
-               "body": "${{ steps.build-jira-api-request-body.outputs.requestBody }}",
+               "body": "${{ steps.build-jira-api-payload.outputs.jiraPayload }}",
                "visibility": {
                    "type": "role",
                    "value": "Members"
