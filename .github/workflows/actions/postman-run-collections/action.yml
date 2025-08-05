@@ -121,4 +121,4 @@ runs:
           '{name: $name, reportUrl: $reportUrl, succeeded: ($succeeded == "success")}')
         
         echo "Generated Report JSON: $report"
-        echo 'report=$report' >> $GITHUB_OUTPUT
+        echo "report=$report" >> $GITHUB_OUTPUT

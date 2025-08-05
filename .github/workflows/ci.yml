@@ -62,7 +62,7 @@ jobs:
         if: always()
         run: |
           echo "Matrix folder: ${{ matrix.folder }}"
-          echo "Basic Results: ${{ needs.api-tests.outputs.basic-result }}"
+          echo "Basic Results: ${{ needs.api-tests.outputs }}"
           echo "Fail Results: ${{ needs.api-tests.outputs.fail-result }}"
           
 
