@@ -21,23 +21,30 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Build Jira API Payload
-      id: build-jira-api-payload
+    - name: Build Jira API Request Body
+      id: build-jira-api-request-body
       if: always()
       shell: bash
       run: |
-        comment="${{ inputs.project-name }} API-Test-Report:"
+        # 1. Build the multi-line comment string first
+        commentBody="${{ inputs.project-name }} API-Test-Report:"
         
-        echo '${{ inputs.reports }}' | jq -c '.[]' | while IFS= read -r entry; do
+        # Use a subshell and process substitution for a cleaner loop
+        while IFS= read -r entry; do
           name=$(echo "$entry" | jq -r '.name')
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
         
-          comment+="\n$name:$succeeded - $url"
-        done
+          # Append with a literal \n for the newline
+          commentBody+="\n$name:$succeeded - $url"
+        done < <(echo '${{ inputs.reports }}' | jq -c '.[]')
         
+        # 2. Use jq to create the complete, escaped, single-line JSON payload
+        # -n: Create new JSON, don't read from stdin
+        # -c: Compact output (ensures it's a single line)
+        # --arg: Safely pass the shell variable into the jq script
         jiraPayload=$(jq -n -c \
-          --arg bodyContent "$comment" \
+          --arg bodyContent "$commentBody" \
           '{
             body: $bodyContent,
             visibility: {
@@ -46,16 +53,18 @@ runs:
             }
           }')
         
-        echo $jiraPayload
+        # 3. Output the final JSON payload. It's now a single line, so this is safe.
         echo "jiraPayload=$jiraPayload" >> $GITHUB_OUTPUT
 
     - name: Publish Jira Comment
       shell: bash
       if: always()
       run: |
-          curl --request POST \
-               --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-269/comment' \
-               --user '${{ inputs.jira-user-email }}:${{ inputs.jira-user-api-token }}' \
-               --header 'Accept: application/json' \
-               --header 'Content-Type: application/json' \
-               --data '${{ steps.build-jira-api-payload.outputs.jiraPayload }}'
+        # The output is already a complete and valid JSON string.
+        # Just pass it directly to the --data field.
+        curl --request POST \
+             --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-269/comment' \
+             --user '${{ inputs.jira-user-email }}:${{ inputs.jira-user-api-token }}' \
+             --header 'Accept: application/json' \
+             --header 'Content-Type: application/json' \
+             --data '${{ steps.build-jira-api-request-body.outputs.jiraPayload }}'
