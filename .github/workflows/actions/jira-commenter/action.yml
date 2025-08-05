@@ -42,7 +42,7 @@ runs:
       if: always()
       shell: bash
       run: |
-        requestBody = "${{ inputs.project-name }} API-Test-Report:"
+        requestBody="${{ inputs.project-name }} API-Test-Report:"
         
         echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
           name=$(echo "$entry" | jq -r '.name')
