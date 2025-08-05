@@ -25,7 +25,7 @@ runs:
       shell: bash
       run: |
         echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
-          echo "---------------------------"
+          echo "---------------------------"  
           echo "Full JSON object: $entry"
           
           name=$(echo "$entry" | jq -r '.name')
@@ -55,7 +55,7 @@ runs:
           requestBody+="\n $name:$succeeded - $url"
         done
         
-        echo requestBody=$requestBody >> $GITHUB_OUTPUT
+        echo "requestBody=$requestBody" >> $GITHUB_OUTPUT
 
     - name: Publish Jira Comment
       shell: bash
