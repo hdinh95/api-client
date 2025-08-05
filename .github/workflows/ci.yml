@@ -86,7 +86,8 @@ jobs:
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
+          project-name: 'IPP'
           reports: '${{ steps.convert_matrix_outputs_to_json_array.outputs.result }}'
-          jira_user_api_token: 'api-token'
-          ticket: 'TEST-123'
-          jira_user_email: 'username'
+          ticket: 'ITU-269'
+          jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
+          jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}

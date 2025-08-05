@@ -2,16 +2,19 @@ name: Post Jira Comment
 description: "Post comment to Jira issues containing test results and report urls"
 
 inputs:
+  project-name:
+    description: "The name of the project for which the reports are being posted"
+    required: true
   reports:
     description: An array of json objects reports urls objects
     required: true
   ticket:
     description: "Consists of the ticket abbreviation and key. e.g. ITU-269"
     required: true
-  jira_user_email:
+  jira-user-email:
     description: "The email of the Jira user for publishing the deployment URL"
     required: true
-  jira_user_api_token:
+  jira-user-api-token:
     description: "The api token from the Jira user used for authentication to Jira"
     required: true
 
@@ -20,15 +23,27 @@ runs:
   steps:
     - name: Print reports
       shell: bash
-      run: echo '${{ inputs.reports }}'
-
-    - name: Print json
-      shell: bash
       run: |
         echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
           echo "---------------------------"
           echo "Full JSON object: $entry"
+          
+          name=$(echo "$entry" | jq -r '.name')
+          url=$(echo "$entry" | jq -r '.reportUrl')
+          succeeded=$(echo "$entry" | jq -r '.succeeded')
+          
+          echo "Name: $name"
+          echo "URL: $url"
+          echo "Succeeded: $succeeded"
+        done
+
+    - name: Build Jira API Request Body
+      id: build-jira-api-request-body
+      shell: bash
+      run: |
+        requestBody = "${{ inputs.project-name }} API-Test-Report:"
         
+        echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
           name=$(echo "$entry" | jq -r '.name')
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
@@ -36,4 +51,24 @@ runs:
           echo "Name: $name"
           echo "URL: $url"
           echo "Succeeded: $succeeded"
+        
+          requestBody+="\n $name:$succeeded - $url"
         done
+        
+        echo $requestBody >> $GITHUB_ENV
+
+    - name: Publish Jira Comment
+      shell: bash
+      if: always()
+      run: |
+          curl --request POST \
+               --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-269/comment' \
+               --user '${{ inputs.jira-user-email }}:${{ inputs.jira-user-api-token }}' \
+               --header 'Accept: application/json' \
+               --header 'Content-Type: application/json' \
+               --data '{
+               "body": "${{ env.requestBody }}",
+               "visibility": {
+                   "type": "role",
+                   "value": "Members"
+               }}'
