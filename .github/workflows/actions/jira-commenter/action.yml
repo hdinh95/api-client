@@ -25,13 +25,15 @@ runs:
     - name: Print json
       shell: bash
       run: |
-        echo '${{ inputs.reports }}' | while IFS= read -r entry; do
+        echo '${{ inputs.reports }}' | jq '.[]' | jq -c | while IFS= read -r entry; do
           echo "---------------------------"
           echo "Full JSON object: $entry"
         
           name=$(echo "$entry" | jq -r '.name')
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
+        
           echo "Name: $name"
           echo "URL: $url"
+          echo "Succeeded: $succeeded"
         done
