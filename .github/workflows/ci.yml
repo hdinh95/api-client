@@ -81,7 +81,7 @@ jobs:
           echo "Matrix folder: ${{ matrix.folder }}"
           echo "First Attempt Results: ${{ toJSON(needs.api-tests.outputs) }}"
           echo "Action Matrix Results: ${{ steps.read.outputs.result }}"
-          echo "First result: ${{ fromJSON(steps.read.outputs.result).result }}"
+          echo "First result: ${{ toJSON(fromJSON(steps.read.outputs.result).result) }}"
           
           temp=${{ fromJSON(steps.read.outputs.result).result }}
           
