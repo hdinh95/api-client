@@ -3,7 +3,7 @@ description: "Post comment to Jira issues containing test results and report url
 
 inputs:
   reports:
-    description: An array of reports urls objects
+    description: An array of json objects reports urls objects
     required: true
   ticket:
     description: "Consists of the ticket abbreviation and key. e.g. ITU-269"
@@ -24,4 +24,14 @@ runs:
 
     - name: Print json
       shell: bash
-      run: echo '${{ inputs.reports }}' | jq .name
+      run: |
+        echo '${{ inputs.reports }}' | while IFS= read -r entry; do
+          echo "---------------------------"
+          echo "Full JSON object: $entry"
+        
+          name=$(echo "$entry" | jq -r '.name')
+          url=$(echo "$entry" | jq -r '.reportUrl')
+          succeeded=$(echo "$entry" | jq -r '.succeeded')
+          echo "Name: $name"
+          echo "URL: $url"
+        done

@@ -75,24 +75,18 @@ jobs:
         with:
           matrix-step-name: api-tests
 
-      - name: Print Matrix
+      - name: Convert Matrix Outputs to JSON Array
+        id: convert_matrix_outputs_to_json_array
         if: always()
         run: |
-          echo "Matrix folder: ${{ matrix.folder }}"
-          echo "First Attempt Results: ${{ toJSON(needs.api-tests.outputs) }}"
-          echo "First Attempt Results (toJSON): ${{ toJSON(needs.api-tests.outputs) }}"
-          echo "Action Matrix Results: ${{ steps.read.outputs.result }}"
-          echo "First result: ${{ toJSON(steps.read.outputs.result) }}"
-          
-          temp=${{ toJSON(fromJSON(steps.read.outputs.result).result) }}
-          
-          echo "$temp"
+          result=${{ toJSON(steps.read.outputs.result) }}
+          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
         if: always()
         with:
-          reports: '${{ steps.build_report.outputs.report }}'
+          reports: '${{ steps.convert_matrix_outputs_to_json_array.outputs.result }}'
           jira_user_api_token: 'api-token'
           ticket: 'TEST-123'
           jira_user_email: 'username'
