@@ -55,7 +55,7 @@ runs:
           requestBody+="\n $name:$succeeded - $url"
         done
         
-        echo $requestBody >> $GITHUB_ENV
+        echo requestBody=$requestBody >> $GITHUB_OUTPUT
 
     - name: Publish Jira Comment
       shell: bash
@@ -67,7 +67,7 @@ runs:
                --header 'Accept: application/json' \
                --header 'Content-Type: application/json' \
                --data '{
-               "body": "${{ env.requestBody }}",
+               "body": "${{ steps.build-jira-api-request-body.outputs.requestBody }}",
                "visibility": {
                    "type": "role",
                    "value": "Members"
