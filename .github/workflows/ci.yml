@@ -62,9 +62,8 @@ jobs:
         if: always()
         run: |
           echo "Matrix folder: ${{ matrix.folder }}"
-          echo "Basic Results: ${{ needs.api-tests.outputs }}"
+          echo "Basic Results: ${{ toJSON(needs.api-tests.outputs) }}"
           echo "Fail Results: ${{ needs.api-tests.outputs.fail-result }}"
-          
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
