@@ -50,6 +50,14 @@ jobs:
         run: |
           echo '${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}' >> $GITHUB_OUTPUT
 
+      - name: Use Matrix Output Storage
+        uses: cloudposse/github-action-matrix-outputs-write@v1
+        with:
+          matrix-step-name: ${{ github.job }}
+          matrix-key: ${{ matrix.folder }}
+          outputs: |-
+            result: ${{ steps.postman_run.outputs.report }}
+
   post-comment:
     needs:
       - api-tests
@@ -59,12 +67,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
+      - name: Read Matrix Outputs Storage
+        if: always()
+        uses: cloudposse/github-action-matrix-outputs-read@v1
+        id: read
+        with:
+          matrix-step-name: api-tests
+
       - name: Print Matrix
         if: always()
         run: |
           echo "Matrix folder: ${{ matrix.folder }}"
-          echo "Basic Results: ${{ toJSON(needs.api-tests.outputs) }}"
-          echo "Fail Results: ${{ needs.api-tests.outputs.fail-result }}"
+          echo "First Attempt Results: ${{ toJSON(needs.api-tests.outputs) }}"
+          echo "Action Matrix Results: ${{ steps.read.outputs.result }}"
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
