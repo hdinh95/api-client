@@ -51,6 +51,7 @@ jobs:
           echo '${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}' >> $GITHUB_OUTPUT
 
       - name: Use Matrix Output Storage
+        if: always()
         uses: cloudposse/github-action-matrix-outputs-write@v1
         with:
           matrix-step-name: ${{ github.job }}
