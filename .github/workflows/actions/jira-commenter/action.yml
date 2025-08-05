@@ -39,6 +39,7 @@ runs:
 
     - name: Build Jira API Request Body
       id: build-jira-api-request-body
+      if: always()
       shell: bash
       run: |
         requestBody = "${{ inputs.project-name }} API-Test-Report:"
@@ -55,6 +56,7 @@ runs:
           requestBody+="\n $name:$succeeded - $url"
         done
         
+        echo "$requestBody"
         echo "requestBody=$requestBody" >> $GITHUB_OUTPUT
 
     - name: Publish Jira Comment
