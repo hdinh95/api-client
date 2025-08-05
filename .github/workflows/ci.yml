@@ -47,7 +47,7 @@ jobs:
       - name: Store Postman Results as Outputs
         if: always()
         run: |
-          echo "${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}" >> $GITHUB_OUTPUT
+          echo '${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}'' >> $GITHUB_OUTPUT
 
   post-comment:
     needs:

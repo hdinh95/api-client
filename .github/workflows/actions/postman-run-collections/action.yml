@@ -115,10 +115,10 @@ runs:
       shell: bash
       run: |
         report=$(jq -cn \
-          --arg name "${{ inputs.name }}" \
+          --arg name "${{ inputs.test-name }}" \
           --arg reportUrl "${{ steps.upload_report.outputs.artifact-url  }}" \
           --arg succeeded "${{ steps.run_collections.outcome }}" \
           '{name: $name, reportUrl: $reportUrl, succeeded: ($succeeded == "success")}')
         
         echo "Generated Report JSON: $report"
-        echo "report=$report" >> $GITHUB_OUTPUT
+        echo 'report=$report' >> $GITHUB_OUTPUT
