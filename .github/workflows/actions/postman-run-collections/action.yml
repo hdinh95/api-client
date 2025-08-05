@@ -1,5 +1,8 @@
 name: Run Postman Collection
 inputs:
+  test-name:
+    description: General name of the postman collection. Used for reporting purposes
+    required: true
   collection:
     description: Postman collection
     required: true
@@ -112,7 +115,7 @@ runs:
       shell: bash
       run: |
         report=$(jq -cn \
-          --arg name "${{ inputs.folder }}" \
+          --arg name "${{ inputs.name }}" \
           --arg reportUrl "${{ steps.upload_report.outputs.artifact-url  }}" \
           --arg succeeded "${{ steps.run_collections.outcome }}" \
           '{name: $name, reportUrl: $reportUrl, succeeded: ($succeeded == "success")}')

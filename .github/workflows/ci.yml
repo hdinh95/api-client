@@ -15,11 +15,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Do API Tests (Fail)
-        run: |
-          echo "Failed API Tests"
-          exit 1
-
   api-tests:
     name: Data-Driven API Tests
     runs-on: ubuntu-latest
@@ -28,8 +23,10 @@ jobs:
       matrix:
         include:
           - folder: "basic"
+            test-name: "Basic Tests"
             report-filename: positive-report
           - folder: "fail"
+            test-name: "Fail Tests"
             report-filename: negative-report
     outputs:
       basic-result: ${{ steps.postman_run.outputs.basic-result }}
@@ -42,6 +39,7 @@ jobs:
         id: postman_run
         uses: ./.github/workflows/actions/postman-run-collections
         with:
+          test-name: ${{ matrix.test-name }}
           collection: ./dog.collection.json
           folder: ${{matrix.folder}}
           report-filename: ${{matrix.report-filename}}
@@ -49,10 +47,7 @@ jobs:
       - name: Store Postman Results as Outputs
         if: always()
         run: |
-          echo "Matrix Information: ${{ matrix.folder }}"
-          echo "Postman Run Output: ${{ steps.postman_run.outputs.report }}"
-          
-        
+          echo "${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}" >> $GITHUB_OUTPUT
 
   post-comment:
     needs:
@@ -63,26 +58,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
 
-      - name: Fail on Purpose
-        id: fail_step
-        run: |
-          echo "This step is intentionally failing"
-          exit 1
-
-      - name: Build Report
-        id: build_report
+      - name: Print Matrix
         if: always()
         run: |
-          report=$(jq -cn --arg succeeded "${{ steps.fail_step.outcome }}" '{name: "Data-Driven API Tests", url: "https://example.com/report", succeeded: ($succeeded == "true")}')
+          echo "Matrix folder: ${{ matrix.folder }}"
+          echo "Basic Results: ${{ needs.api-tests.outputs.basic-result }}"
+          echo "Fail Results: ${{ needs.api-tests.outputs.fail-result }}"
           
-          echo "Generated Report JSON: $report"
-          echo "report=$report" >> $GITHUB_OUTPUT
-
-      - name: Print report
-        if: always()
-        run: |
-          echo "Report to json: ${{ toJSON(steps.build_report.outputs.report) }}"
-          echo "Report: ${{ steps.build_report.outputs.report }}"
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
