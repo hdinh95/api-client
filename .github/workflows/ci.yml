@@ -31,6 +31,9 @@ jobs:
             report-filename: positive-report
           - folder: "fail"
             report-filename: negative-report
+      outputs:
+        basic-result: ${{ steps.postman_run.outputs.basic-result }}
+        fail-result: ${{ steps.postman_run.outputs.fail-result }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
@@ -43,10 +46,12 @@ jobs:
           folder: ${{matrix.folder}}
           report-filename: ${{matrix.report-filename}}
 
-      - name: Use Output
+      - name: Store Postman Results as Outputs
         if: always()
         run: |
+          echo "Matrix Information: ${{ matrix.include.folder }}"
           echo "Postman Run Output: ${{ steps.postman_run.outputs.report }}"
+          
         
 
   post-comment:
