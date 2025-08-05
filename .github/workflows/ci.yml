@@ -49,7 +49,7 @@ jobs:
       - name: Store Postman Results as Outputs
         if: always()
         run: |
-          echo "Matrix Information: ${{ matrix.include.folder }}"
+          echo "Matrix Information: ${{ matrix.folder }}"
           echo "Postman Run Output: ${{ steps.postman_run.outputs.report }}"
           
         
