@@ -37,7 +37,7 @@ runs:
         done
         
         jiraPayload=$(jq -n -c \
-          --arg bodyContent "comment" \
+          --arg bodyContent "$comment" \
           '{
             body: $bodyContent,
             visibility: {
@@ -58,9 +58,4 @@ runs:
                --user '${{ inputs.jira-user-email }}:${{ inputs.jira-user-api-token }}' \
                --header 'Accept: application/json' \
                --header 'Content-Type: application/json' \
-               --data '{
-               "body": "${{ steps.build-jira-api-payload.outputs.jiraPayload }}",
-               "visibility": {
-                   "type": "role",
-                   "value": "Members"
-               }}'
+               --data '${{ steps.build-jira-api-payload.outputs.jiraPayload }}'
