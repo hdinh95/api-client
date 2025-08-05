@@ -29,8 +29,8 @@ jobs:
             test-name: "Fail Tests"
             report-filename: negative-report
     outputs:
-      basic-result: ${{ steps.postman_run.outputs.basic-result }}
-      fail-result: ${{ steps.postman_run.outputs.fail-result }}
+      basic-result: ${{ steps.build_postman_run_output.outputs.basic-result }}
+      fail-result: ${{ steps.build_postman_run_output.outputs.fail-result }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
@@ -45,6 +45,7 @@ jobs:
           report-filename: ${{matrix.report-filename}}
 
       - name: Store Postman Results as Outputs
+        id: build_postman_run_output
         if: always()
         run: |
           echo '${{ matrix.folder }}-result=${{ steps.postman_run.outputs.report }}' >> $GITHUB_OUTPUT
