@@ -33,7 +33,7 @@ runs:
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
         
-          comment+="\\\\n* $name:$succeeded - $url"
+          comment+=" \\\\n $name:$succeeded - $url"
         done < <(echo '${{ inputs.reports }}' | jq -c '.[]')
         
         jiraPayload=$(jq -n -c \
