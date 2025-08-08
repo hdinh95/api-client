@@ -41,7 +41,7 @@ runs:
             succeeded="Failed ❌"
           fi
         
-          comment+="\\\\$name:$succeeded - \\\\$url "
+          comment+="\\\\$name - $succeeded \\\\$url "
         done < <(echo '${{ inputs.reports }}' | jq -c '.[]')
         
         jiraPayload=$(jq -n -c \
