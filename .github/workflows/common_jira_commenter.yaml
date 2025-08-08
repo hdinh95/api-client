@@ -1,0 +1,90 @@
+name: Post Passed Jira Comment
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "The name of the project for which the reports are being posted"
+        required: true
+        type: string
+      matrix-step-name-output:
+        description: The matrix identifier used to get the results from the matrix outputs storage
+        required: true
+        type: string
+      ticket-key:
+        description: "The number of the ticket. e.g. ITU-269 -> Key would be 269"
+        required: true
+        type: number
+
+    secrets:
+      jira-user-email:
+        description: "The email of the Jira user for publishing the deployment URL"
+        required: true
+      jira-user-api-token:
+        description: "The api token from the Jira user used for authentication to Jira"
+        required: true
+
+jobs:
+  post-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: test
+        run: echo "New Common WF used"
+
+      - name: Read Matrix Outputs Storage
+        uses: cloudposse/github-action-matrix-outputs-read@v1
+        id: read-matrix-outputs
+        with:
+          matrix-step-name: ${{ inputs.matrix-step-name-output }}
+
+      - name: Convert Matrix Outputs to JSON Array
+        id: convert-matrix-outputs-to-json_array
+        run: |
+          result=${{ toJSON(steps.read-matrix-outputs.outputs.result) }}
+          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
+
+      - name: Build Jira API Payload
+        id: build-jira-api-payload
+        run: |
+          comment="${{ inputs.project-name }} API-Test-Report:"
+          
+          while IFS= read -r entry; do
+            # Extract fields from the JSON
+            name=$(echo "$entry" | jq -r '.name')
+            url=$(echo "$entry" | jq -r '.reportUrl')
+            succeeded=$(echo "$entry" | jq -r '.succeeded')
+          
+            # Apply Postman Datasource
+            if [ "$succeeded" == true ]; then
+              succeeded="Passed ✅"
+            else
+              succeeded="Failed ❌"
+            fi
+          
+            comment+="\\\\$name - $succeeded \\\\$url "
+          done < <(echo '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}' | jq 'sort_by(.name) | .[]' -c)
+          
+          jiraPayload=$(jq -n -c \
+            --arg bodyContent "$comment" \
+            '{
+              body: $bodyContent,
+              visibility: {
+                type: "role",
+                value: "Members"
+              }
+            }')
+          
+          echo $jiraPayload
+          echo "jiraPayload=$jiraPayload" >> $GITHUB_OUTPUT
+
+      - name: Publish Jira Comment
+        run: |
+          curl --request POST \
+               --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-${{ inputs.ticket-key }}/comment' \
+               --user '${{ secrets.jira-user-email }}:${{ secrets.jira-user-api-token }}' \
+               --header 'Accept: application/json' \
+               --header 'Content-Type: application/json' \
+               --data '${{ steps.build-jira-api-payload.outputs.jiraPayload }}'

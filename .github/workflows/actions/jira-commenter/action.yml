@@ -21,10 +21,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: test
-      shell: bash
-      run: echo "Print ticket nr ${{ inputs.ticket-key }}"
-
     - name: Build Jira API Payload
       id: build-jira-api-payload
       if: always()

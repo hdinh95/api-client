@@ -58,34 +58,46 @@ jobs:
 
   # TODO: Use a own action for this
   post-comment:
-    needs:
-      - api-tests
-    runs-on: ubuntu-latest
+    needs: [ api-tests ]
     if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr' }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4.2.2
+    uses: ./.github/workflows/common_jira_commenter.yaml
+    with:
+      project-name: 'IPP'
+      matrix-step-name-output: "api-tests"
+      ticket-key: ${{ github.event.client_payload.ticket_key }}
+    secrets:
+      jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+      jira-user-api-token: ${{ secrets.JIRA_USER_API_TOKEN }}
 
-      - name: Read Matrix Outputs Storage
-        uses: cloudposse/github-action-matrix-outputs-read@v1
-        id: read
-        with:
-          matrix-step-name: api-tests
-
-      - name: Convert Matrix Outputs to JSON Array
-        id: convert-matrix-outputs-to-json_array
-        run: |
-          result=${{ toJSON(steps.read.outputs.result) }}
-          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
-
-      - name: Post Comment on Jira
-        uses: ./.github/workflows/actions/jira-commenter
-        with:
-          project-name: 'IPP'
-          reports: '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}'
-          ticket-key: ${{ github.event.client_payload.ticket_key }}
-          jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
-          jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}
+#  post-comment:
+#    needs:
+#      - api-tests
+#    runs-on: ubuntu-latest
+#    if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr' }}
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v4.2.2
+#
+#      - name: Read Matrix Outputs Storage
+#        uses: cloudposse/github-action-matrix-outputs-read@v1
+#        id: read
+#        with:
+#          matrix-step-name: api-tests
+#
+#      - name: Convert Matrix Outputs to JSON Array
+#        id: convert-matrix-outputs-to-json_array
+#        run: |
+#          result=${{ toJSON(steps.read.outputs.result) }}
+#          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
+#
+#      - name: Post Comment on Jira
+#        uses: ./.github/workflows/actions/jira-commenter
+#        with:
+#          project-name: 'IPP'
+#          reports: '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}'
+#          ticket-key: ${{ github.event.client_payload.ticket_key }}
+#          jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
+#          jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}
 
 #    api-tests:
 #      name: Data-Driven API Tests
