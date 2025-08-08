@@ -29,11 +29,19 @@ runs:
         comment="${{ inputs.project-name }} API-Test-Report:"
         
         while IFS= read -r entry; do
+          # Extract fields from the JSON
           name=$(echo "$entry" | jq -r '.name')
           url=$(echo "$entry" | jq -r '.reportUrl')
           succeeded=$(echo "$entry" | jq -r '.succeeded')
         
-          comment+=" \\\\ $name:$succeeded - $url"
+          # Apply Postman Datasource
+          if [ "$succeeded" == true ]; then
+            succeeded="Passed ✅"
+          else
+            succeeded="Failed ❌"
+          fi
+        
+          comment+="\\\\$name:$succeeded - \\\\$url "
         done < <(echo '${{ inputs.reports }}' | jq -c '.[]')
         
         jiraPayload=$(jq -n -c \
