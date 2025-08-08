@@ -68,8 +68,8 @@ runs:
           "-e" "${{inputs.environment}}"
           "-r" "cli,htmlextra"
           "--reporter-htmlextra-export" "${{inputs.report-directory}}/${{inputs.report-filename}}.html"
-          "--reporter-htmlextra-omitHeaders"
-          "--reporter-htmlextra-omitResponseBodies"
+          "--reporter-htmlextra-skipSensitiveData"
+          "--reporter-htmlextra-showOnlyFails"
         )
         
         # Apply Postman Datasource
