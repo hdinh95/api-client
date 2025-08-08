@@ -8,8 +8,8 @@ inputs:
   reports:
     description: An array of json objects reports urls objects
     required: true
-  ticket:
-    description: "Consists of the ticket abbreviation and key. e.g. ITU-269"
+  ticket-key:
+    description: "The number of the ticket. e.g. ITU-269 -> Key would be 269"
     required: true
   jira-user-email:
     description: "The email of the Jira user for publishing the deployment URL"
@@ -21,6 +21,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: test
+      shell: bash
+      run: echo "Print ticket nr ${{ inputs.ticket-key }}"
+
     - name: Build Jira API Payload
       id: build-jira-api-payload
       if: always()
@@ -62,7 +66,7 @@ runs:
       if: always()
       run: |
           curl --request POST \
-               --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-269/comment' \
+               --url 'https://austrianstandards.atlassian.net/rest/api/2/issue/ITU-${{ inputs.ticket-key }}/comment' \
                --user '${{ inputs.jira-user-email }}:${{ inputs.jira-user-api-token }}' \
                --header 'Accept: application/json' \
                --header 'Content-Type: application/json' \

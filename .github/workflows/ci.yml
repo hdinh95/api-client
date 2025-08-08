@@ -82,11 +82,11 @@ jobs:
 
       - name: Post Comment on Jira
         uses: ./.github/workflows/actions/jira-commenter
-        if: always()
+        if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr' }}
         with:
           project-name: 'IPP'
           reports: '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}'
-          ticket: 'ITU-269'
+          ticket-key: ${{ github.event.client_payload.ticket_key }}
           jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
           jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}
 
