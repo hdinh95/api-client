@@ -1,0 +1,6096 @@
+{
+	"info": {
+		"_postman_id": "c4bfb191-7f97-4c50-b665-8dd530483309",
+		"name": "IPP API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44617731",
+		"_collection_link": "https://alinajelinek.postman.co/workspace/GitHub-API-Testing-Workspace~36959f40-c31d-44b2-921a-aa2b11058ec9/collection/44617731-c4bfb191-7f97-4c50-b665-8dd530483309?action=share&source=collection_link&creator=44617731"
+	},
+	"item": [
+		{
+			"name": "One-Time Tests",
+			"item": [
+				{
+					"name": "OT - Basic Tests",
+					"item": [
+						{
+							"name": "PortfolioSearch - Basic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});",
+											"",
+											"",
+											"const schema = {",
+											"    \"type\": \"object\",",
+											"    \"additionalProperties\": false,",
+											"    \"properties\": {",
+											"        \"portfolioItems\": {",
+											"            \"type\": \"array\",",
+											"            \"description\": \"The portfolio items matching the given parameters\",",
+											"            \"items\": {",
+											"                \"type\": \"object\",",
+											"                \"required\": [\"id\", \"docKey\", \"docNumber\", \"publicationDate\", \"withdrawalDate\", \"status\", \"language\", \"title\", \"abstract\", \"validity\", \"publisher\", \"committee\", \"ics\"],",
+											"                \"additionalProperties\": false,",
+											"                \"properties\": {",
+											"                    \"id\": { \"type\": \"string\" },",
+											"                    \"docKey\": { \"type\": \"integer\" },",
+											"                    \"docNumber\": { \"type\": \"string\" },",
+											"                    \"publicationDate\": { \"type\": \"string\", \"format\": \"date\" },",
+											"                    \"withdrawalDate\": { \"type\": [\"string\", \"null\"], \"format\": \"date\" },",
+											"                    \"status\": { \"type\": \"string\" },",
+											"                    \"language\": { \"type\": \"string\", \"enum\": [\"DE\", \"EN\"] },",
+											"                    \"title\": { \"type\": \"string\" },",
+											"                    \"abstract\": { \"type\": [\"string\", \"null\"] },",
+											"                    \"validity\": { \"type\": \"boolean\" },",
+											"                    \"publisher\": { \"type\": \"string\" },",
+											"                    \"committee\": {",
+											"                        \"type\": [\"object\", \"null\"],",
+											"                        \"required\": [\"displayName\"],",
+											"                        \"additionalProperties\": false,",
+											"                        \"properties\": {",
+											"                            \"displayName\": { \"type\": \"string\" },",
+											"                            \"title\": { \"type\": \"string\" }",
+											"                        }",
+											"                    },",
+											"                    \"ics\": {",
+											"                        \"type\": \"array\",",
+											"                        \"items\": {",
+											"                            \"type\": \"object\",",
+											"                            \"required\": [\"code\"],",
+											"                            \"additionalProperties\": false,",
+											"                            \"properties\": {",
+											"                                \"code\": { \"type\": \"string\" },",
+											"                                \"title\": { \"type\": \"string\" }",
+											"                            }",
+											"                        }",
+											"                    }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"aggs\": {",
+											"            \"type\": \"object\",",
+											"            \"description\": \"The resulting aggregations for the given search results\",",
+											"            \"additionalProperties\": {",
+											"                \"type\": \"array\",",
+											"                \"items\": {",
+											"                    \"type\": \"object\",",
+											"                    \"required\": [\"value\", \"count\"],",
+											"                    \"additionalProperties\": false,",
+											"                    \"properties\": {",
+											"                        \"value\": { \"type\": \"string\" },",
+											"                        \"count\": { \"type\": \"integer\" }",
+											"                    }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"page\": { \"type\": \"integer\" },",
+											"        \"size\": { \"type\": \"integer\" },",
+											"        \"totalPages\": { \"type\": \"integer\" },",
+											"        \"totalSize\": { \"type\": \"integer\" },",
+											"        \"nextPageRequest\": {",
+											"            \"type\": [\"object\", \"null\"],",
+											"            \"required\": [\"page\", \"size\"],",
+											"            \"additionalProperties\": false,",
+											"            \"properties\": {",
+											"                \"page\": { \"type\": \"integer\" },",
+											"                \"size\": { \"type\": \"integer\" }",
+											"            }",
+											"        }",
+											"    },",
+											"    \"required\": [\"portfolioItems\", \"page\", \"size\", \"totalPages\", \"totalSize\"]",
+											"};",
+											"",
+											"",
+											"pm.test(\"Response matches expected schema\", function () {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/portfolio",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"portfolio"
+									],
+									"query": [
+										{
+											"key": "titlle",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "docNumber",
+											"value": "ÖNORM EN 14803",
+											"disabled": true
+										},
+										{
+											"key": "publicationDateMin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "publicationDateMax",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "withdrawalDateMin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "withdrawalDateMax",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "publisher",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "_page",
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "_size",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "_sorts",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Portfolio",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+											"host": [
+												"{{ipp-baseurl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Suggestions - Basic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"  pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is an array\", function () {",
+											"    const jsonData = pm.response.json();",
+											"    pm.expect(Array.isArray(jsonData)).to.be.true;",
+											"});",
+											"",
+											"pm.test(\"Each item in the array is a string\", function () {",
+											"    const jsonData = pm.response.json();",
+											"    jsonData.forEach(item => {",
+											"        pm.expect(typeof item).to.eql(\"string\");",
+											"    });",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&query=111",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"suggestions"
+									],
+									"query": [
+										{
+											"key": "field",
+											"value": "DOC_NUMBER"
+										},
+										{
+											"key": "_size",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "publicationDateMin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "publicationDateMax",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "withdrawalDateMin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "withdrawalDateMax",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "validity",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "publisher",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "111"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Portfolio",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+											"host": [
+												"{{ipp-baseurl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "PublicationFile - Basic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/portfolio/1434372-DE/publication",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"portfolio",
+										"1434372-DE",
+										"publication"
+									],
+									"query": [
+										{
+											"key": "Range",
+											"value": "0-1023",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Portfolio",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+											"host": [
+												"{{ipp-baseurl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "PortfolioDetails - Basic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});",
+											"",
+											"",
+											"const schema = {",
+											"    \"type\": \"object\",",
+											"    \"required\": [\"id\", \"docNumber\", \"publicationDate\", \"status\", \"title\", \"validity\", \"publisher\", \"committee\", \"ics\", \"normativeReferences\"],",
+											"    \"additionalProperties\": false,",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" },",
+											"        \"docNumber\": { \"type\": \"string\" },",
+											"        \"publicationDate\": { \"type\": \"string\", \"format\": \"date\" },",
+											"        \"withdrawalDate\": { \"type\": [\"string\", \"null\"], \"format\": \"date\" },",
+											"        \"status\": { \"type\": \"string\" },",
+											"        \"title\": { \"type\": \"string\" },",
+											"        \"abstract\": { \"type\": [\"string\", \"null\"] },",
+											"        \"validity\": { \"type\": \"boolean\" },",
+											"        \"publisher\": { \"type\": \"string\" },",
+											"        \"committee\": {",
+											"            \"type\": [\"object\", \"null\"],",
+											"            \"required\": [\"displayName\"],",
+											"            \"additionalProperties\": false,",
+											"            \"properties\": {",
+											"                \"displayName\": { \"type\": \"string\" },",
+											"                \"title\": { \"type\": \"string\" }",
+											"            }",
+											"        },",
+											"        \"ics\": {",
+											"            \"type\": \"array\",",
+											"            \"items\": {",
+											"                \"type\": \"object\",",
+											"                \"required\": [\"code\"],",
+											"                \"additionalProperties\": false,",
+											"                \"properties\": {",
+											"                    \"code\": { \"type\": \"string\" },",
+											"                    \"title\": { \"type\": \"string\" }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"publicationMeta\": {",
+											"            \"type\": [\"object\", \"null\"],",
+											"            \"properties\": {",
+											"                \"pageCount\": { \"type\": \"integer\" },",
+											"                \"fileSize\": { \"type\": \"integer\" },",
+											"                \"outline\": {",
+											"                    \"type\": [\"object\", \"null\"],",
+											"                    \"properties\": {",
+											"                        \"content\": {",
+											"                            \"type\": \"array\",",
+											"                            \"items\": {",
+											"                                \"type\": \"object\",",
+											"                                \"required\": [\"title\", \"page\", \"children\"],",
+											"                                \"properties\": {",
+											"                                    \"title\": { \"type\": \"string\" },",
+											"                                    \"page\": { \"type\": \"integer\" },",
+											"                                    \"children\": {",
+											"                                        \"type\": \"array\",",
+											"                                        \"items\": {",
+											"                                            \"type\": \"object\",",
+											"                                            \"required\": [\"title\", \"page\", \"children\"],",
+											"                                            \"properties\": {",
+											"                                                \"title\": { \"type\": \"string\" },",
+											"                                                \"page\": { \"type\": \"integer\" },",
+											"                                                \"children\": {",
+											"                                                    \"type\": \"array\",",
+											"                                                    \"items\": {}",
+											"                                                }",
+											"                                            }",
+											"                                        }",
+											"                                    }",
+											"                                }",
+											"                            }",
+											"                        }",
+											"                    }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"normativeReferences\": {",
+											"            \"type\": \"array\",",
+											"            \"additionalProperties\": false,",
+											"            \"properties\": {",
+											"                \"docNumberIssueDate\": { \"type\": \"string\" },",
+											"                \"id\": { \"type\": [\"string\", \"null\"] },",
+											"            }",
+											"        }",
+											"    }",
+											"};",
+											"",
+											"",
+											"",
+											"pm.test(\"Response matches expected schema\", function () {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/portfolio/1434372-DE/details",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"portfolio",
+										"1434372-DE",
+										"details"
+									],
+									"query": [
+										{
+											"key": "Range",
+											"value": "100",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Portfolio",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+											"host": [
+												"{{ipp-baseurl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "OT - Negative Tests",
+					"item": [
+						{
+							"name": "PortfolioSearch Endpoint",
+							"item": [
+								{
+									"name": "PortfolioSearch - _page less than 0",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_page=-1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "INVALID",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "-1"
+												},
+												{
+													"key": "_size",
+													"value": "100",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - _page value out of range",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_page=10000",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "INVALID",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "10000"
+												},
+												{
+													"key": "_size",
+													"value": "100",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - _size value out of range",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_size=10000000",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "INVALID",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "10000",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "10000000"
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - _size value less than 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_size=0",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "INVALID",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "10000",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "0"
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Invalid _sorts value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_sorts=INVALID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "INVALID",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "10000",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "0",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "INVALID"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Invalid publicationDate value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?publicationDateMin=invalid&publicationDateMax=invalid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "invalid"
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "invalid"
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "5",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "100",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Invalid withdrawalDate value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?withdrawalDateMin=invalid&withdrawalDateMax=invalid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "invalid"
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "invalid"
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "5",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "100",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Invalid validity value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?validity=invalid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "5",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "100",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "invalid"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Suggestions Endpoint",
+							"item": [
+								{
+									"name": "Suggestions - Missing required Query",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "abc",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Missing required field",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?query=abc",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "abc"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Query too short",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400 as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&query=a",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "a"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid field value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=something_invalid&query=111",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "something_invalid"
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "123",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "111"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid status value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													"",
+													"pm.test(\"Response is an empty array\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    pm.expect(jsonData).to.be.an('array').that.is.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&query=111&status=123",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "111"
+												},
+												{
+													"key": "status",
+													"value": "123"
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid publicationDate value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&publicationDateMin=invalid&publicationDateMax=invalid&query=111",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "invalid"
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "invalid"
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "111"
+												},
+												{
+													"key": "status",
+													"value": "123",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid withdrawalDate value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&withdrawalDateMin=invalid&withdrawalDateMax=invalid&query=111",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "invalid"
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "invalid"
+												},
+												{
+													"key": "validity",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "111"
+												},
+												{
+													"key": "status",
+													"value": "123",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid validity value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500 as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&validity=invalid&query=111",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "invalid"
+												},
+												{
+													"key": "query",
+													"value": "111"
+												},
+												{
+													"key": "status",
+													"value": "123",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "Suggestions - Invalid publisher value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});",
+													"",
+													"pm.test(\"Response is an empty array\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    pm.expect(jsonData).to.be.an('array').that.is.empty;",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/suggestions?field=DOC_NUMBER&query=111&publisher=Not ON",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"suggestions"
+											],
+											"query": [
+												{
+													"key": "field",
+													"value": "DOC_NUMBER"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "invalid",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "111"
+												},
+												{
+													"key": "status",
+													"value": "123",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "Not ON"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Publication Endpoint",
+							"item": [
+								{
+									"name": "PublicationFile - nonexistent ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404 as expected\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"",
+													"pm.test(\"Response body is not empty\", function () {",
+													"    pm.expect(pm.response.text()).to.not.be.empty;",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio/1234567-DE/publication",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio",
+												"1234567-DE",
+												"publication"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Details Endpoint",
+							"item": [
+								{
+									"name": "PortfolioDetails - nonexistent id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404 as expected\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Response is JSON\", () => {",
+													"  pm.response.to.be.json;",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio/1234567-DE/details",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio",
+												"1234567-DE",
+												"details"
+											],
+											"query": [
+												{
+													"key": "Range",
+													"value": "100",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "OT - Functional Tests",
+					"item": [
+						{
+							"name": "PortfolioSearch Query Tests",
+							"item": [
+								{
+									"name": "PortfolioSearch - Query DocNumber",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Searching for docNumber returns correct portfolio item(s)\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"docNumber\");",
+													"        pm.expect(item.docNumber).to.eql(\"ÖNORM L 1111\");",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?docNumber=ÖNORM L 1111",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "TR",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "200",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM L 1111"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Status TR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by status=TR only returns 'Technische Regeln'\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"status\");",
+													"        pm.expect(item.status).to.eql(\"TR\");",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?status=TR&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "TR"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Status VN",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by status=VN only returns 'Vornormen'\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"status\");",
+													"        pm.expect(item.status).to.eql(\"VN\");",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?status=VN&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "VN"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Status N",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by status=N only returns 'Normen'\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"status\");",
+													"        pm.expect(item.status).to.eql(\"N\");",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?status=N&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N"
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Validity True",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by validity=true only returns items that are 'Aktuell'\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"validity\");",
+													"        pm.expect(item.validity).to.eql(true);",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?validity=true&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true"
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Validity False",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by validity=false only returns items that are 'Zurückgezogen'\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"validity\");",
+													"        pm.expect(item.validity).to.eql(false);",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?validity=false&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false"
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query Publisher ON",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by publisher=ON only returns items published by ON\", function () {",
+													"    const jsonData = pm.response.json();",
+													"",
+													"    // Ensure portfolioItems exists and is an array",
+													"    pm.expect(jsonData.portfolioItems).to.be.an(\"array\");",
+													"",
+													"    jsonData.portfolioItems.forEach(function (item, index) {",
+													"        pm.expect(item).to.have.property(\"publisher\");",
+													"        pm.expect(item.publisher).to.eql(\"ON\");",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?publisher=ON&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON"
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query PublicationDateMin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by publicationDateMin=2024-01-01 only returns items that were published at this date or later\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    const thresholdDate = new Date(\"2024-01-01\");",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    items.forEach((item, index) => {",
+													"        const pubDate = new Date(item.publicationDate);",
+													"",
+													"        pm.expect(pubDate >= thresholdDate, ",
+													"            `Item ${index} has publicationDate ${item.publicationDate}, which is before 2024-01-01`",
+													"        ).to.be.true;",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?publicationDateMin=2024-01-01&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2024-01-01"
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query PublicationDateMax",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by publicationDateMax=1980-01-01 only returns items that were published at this date or earlier\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    const thresholdDate = new Date(\"1980-01-01\");",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    items.forEach((item, index) => {",
+													"        const pubDate = new Date(item.publicationDate);",
+													"",
+													"        pm.expect(pubDate <= thresholdDate, ",
+													"            `Item ${index} has publicationDate ${item.publicationDate}, which is after 1980-01-01`",
+													"        ).to.be.true;",
+													"    });",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?publicationDateMax=1980-01-01&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "1980-01-01"
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "VN",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query WithdrawalDateMin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by withdrawalDateMin=2024-01-01 only returns items that were published at this date or later\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    const thresholdDate = new Date(\"2024-01-01\");",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    items.forEach((item, index) => {",
+													"        const pubDate = new Date(item.withdrawalDate);",
+													"",
+													"        pm.expect(pubDate >= thresholdDate, ",
+													"            `Item ${index} has withdrawalDate ${item.withdrawalDate}, which is before 2024-01-01`",
+													"        ).to.be.true;",
+													"    });",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?withdrawalDateMin=2024-01-01&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01"
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Query WithdrawalDateMax",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Filtering by withdrawalDateMax=2000-01-01 only returns items that were published at this date or earlier\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    const thresholdDate = new Date(\"2000-01-01\");",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    items.forEach((item, index) => {",
+													"        const pubDate = new Date(item.withdrawalDate);",
+													"",
+													"        pm.expect(pubDate <= thresholdDate, ",
+													"            `Item ${index} has withdrawalDate ${item.withdrawalDate}, which is after 2000-01-01`",
+													"        ).to.be.true;",
+													"    });",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?withdrawalDateMax=2000-01-01&_size=50",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM EN 14803",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "1980-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2000-01-01"
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLISHER:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "VN",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "true",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "PortfolioSearch Sorting Tests",
+							"item": [
+								{
+									"name": "PortfolioSearch - Sorting PublicationDate DESC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Sorting by publicationDate:DESC works as expected.\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    for (let i = 0; i < items.length - 1; i++) {",
+													"        const currentDate = new Date(items[i].publicationDate);",
+													"        const nextDate = new Date(items[i + 1].publicationDate);",
+													"",
+													"        pm.expect(currentDate >= nextDate, `Item ${i} date ${items[i].publicationDate} should be >= Item ${i + 1} date ${items[i + 1].publicationDate}`).to.be.true;",
+													"    }",
+													"});",
+													"",
+													"/*",
+													"const jsonData = pm.response.json();",
+													"const items = jsonData.portfolioItems;",
+													"console.log(\"Publication Dates:\");",
+													"    items.forEach((item, index) => {",
+													"        console.log(`Item ${index + 1}: ${item.publicationDate}`);",
+													"});",
+													"*/"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_sorts=PUBLICATION_DATE:DESC&_size=50&docNumber=ÖNORM C 1109",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLICATION_DATE:DESC"
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "50"
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Sorting PublicationDate ASC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Sorting by publicationDate:ASC works as expected.\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    for (let i = 0; i < items.length - 1; i++) {",
+													"        const currentDate = new Date(items[i].publicationDate);",
+													"        const nextDate = new Date(items[i + 1].publicationDate);",
+													"",
+													"        pm.expect(currentDate <= nextDate, ",
+													"            `Item ${i} date ${items[i].publicationDate} should be <= Item ${i + 1} date ${items[i + 1].publicationDate}`",
+													"        ).to.be.true;",
+													"    }",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?_sorts=PUBLICATION_DATE:ASC&docNumber=ÖNORM C 1109",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLICATION_DATE:ASC"
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Sorting WithdrawalDate DESC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Sorting by withdrawalDate:DESC works as expected (nulls last)\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    for (let i = 0; i < items.length - 1; i++) {",
+													"        const currentDate = items[i].withdrawalDate;",
+													"        const nextDate = items[i + 1].withdrawalDate;",
+													"",
+													"        // If current is null, all following must also be null",
+													"        if (currentDate === null) {",
+													"            pm.expect(nextDate, `Item ${i} has null withdrawalDate but is not at the end`).to.eql(null);",
+													"            continue;",
+													"        }",
+													"",
+													"        // If next is null, current is valid and we skip comparison",
+													"        if (nextDate === null) {",
+													"            continue;",
+													"        }",
+													"",
+													"        const current = new Date(currentDate);",
+													"        const next = new Date(nextDate);",
+													"",
+													"        pm.expect(current >= next,",
+													"            `Item ${i} date ${currentDate} should be >= Item ${i + 1} date ${nextDate}`",
+													"        ).to.be.true;",
+													"    }",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?docNumber=ÖNORM C 1109&_sorts=WITHDRAWAL_DATE:DESC",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "WITHDRAWAL_DATE:DESC"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Sorting WithdrawalDate ASC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Sorting by withdrawalDate:ASC works as expected (nulls last)\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    for (let i = 0; i < items.length - 1; i++) {",
+													"        const currentDate = items[i].withdrawalDate;",
+													"        const nextDate = items[i + 1].withdrawalDate;",
+													"",
+													"        // If current date is null, it must be the last non-null item",
+													"        if (currentDate === null) {",
+													"            pm.expect(nextDate, `Item ${i} has null withdrawalDate but is not at the end`).to.eql(null);",
+													"            continue;",
+													"        }",
+													"",
+													"        // If next date is null, current must not be null (already checked above)",
+													"        if (nextDate === null) {",
+													"            continue; // valid case, nulls are at the end",
+													"        }",
+													"",
+													"        const current = new Date(currentDate);",
+													"        const next = new Date(nextDate);",
+													"",
+													"        pm.expect(current <= next,",
+													"            `Item ${i} date ${currentDate} should be <= Item ${i + 1} date ${nextDate}`",
+													"        ).to.be.true;",
+													"    }",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?docNumber=ÖNORM C 1109&_sorts=WITHDRAWAL_DATE:ASC",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLICATION_DATE:ASC",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "WITHDRAWAL_DATE:ASC"
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Sorting Validity ASC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Sorting by VALIDITY:ASC works as expected. Invalid items are shown before valid items.\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    let seenTrue = false;",
+													"",
+													"    for (let i = 0; i < items.length; i++) {",
+													"        const validity = items[i].validity;",
+													"",
+													"        pm.expect(typeof validity).to.eql(\"boolean\");",
+													"",
+													"        if (validity === true) {",
+													"            seenTrue = true;",
+													"        }",
+													"",
+													"        if (seenTrue) {",
+													"            pm.expect(validity, `Item ${i} has validity=false after a true`).to.be.true;",
+													"        }",
+													"    }",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?docNumber=ÖNORM C 1109&_sorts=VALIDITY:ASC",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLICATION_DATE:ASC",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "WITHDRAWAL_DATE:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "10000",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "VALIDITY:ASC"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								},
+								{
+									"name": "PortfolioSearch - Sorting Validity DESC",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"",
+													"pm.test(\"Sorting by VALIDITY:DESC works as expected. Valid items are shown before invalid items.\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    const items = jsonData.portfolioItems;",
+													"",
+													"    pm.expect(items).to.be.an(\"array\");",
+													"",
+													"    let seenFalse = false;",
+													"",
+													"    for (let i = 0; i < items.length; i++) {",
+													"        const validity = items[i].validity;",
+													"",
+													"        pm.expect(typeof validity).to.eql(\"boolean\");",
+													"",
+													"        if (validity === false) {",
+													"            seenFalse = true;",
+													"        }",
+													"",
+													"        if (seenFalse) {",
+													"            pm.expect(validity, `Item ${i} has validity=true after a false`).to.be.false;",
+													"        }",
+													"    }",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{api-key}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "X-API-KEY",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/portfolio?docNumber=ÖNORM C 1109&_sorts=VALIDITY:DESC",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											],
+											"query": [
+												{
+													"key": "titlle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "docNumber",
+													"value": "ÖNORM C 1109"
+												},
+												{
+													"key": "publicationDateMin",
+													"value": "2090-11-05",
+													"disabled": true
+												},
+												{
+													"key": "publicationDateMax",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMin",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "withdrawalDateMax",
+													"value": "2024-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publisher",
+													"value": "ON",
+													"disabled": true
+												},
+												{
+													"key": "_page",
+													"value": "8",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "PUBLICATION_DATE:ASC",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "WITHDRAWAL_DATE:ASC",
+													"disabled": true
+												},
+												{
+													"key": "{{query}}",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "N",
+													"disabled": true
+												},
+												{
+													"key": "validity",
+													"value": "false",
+													"disabled": true
+												},
+												{
+													"key": "_size",
+													"value": "10000",
+													"disabled": true
+												},
+												{
+													"key": "_sorts",
+													"value": "VALIDITY:DESC"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Portfolio",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+													"host": [
+														"{{ipp-baseurl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"portfolio"
+													]
+												}
+											},
+											"_postman_previewlanguage": "Text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Data-Driven Tests",
+			"item": [
+				{
+					"name": "DD - Basic Tests",
+					"item": [
+						{
+							"name": "PortfolioDetails - Basic - DD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response is JSON\", () => {",
+											"  pm.response.to.be.json;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body is not empty\", function () {",
+											"    pm.expect(pm.response.text()).to.not.be.empty;",
+											"});",
+											"",
+											"",
+											"const schema = {",
+											"    \"type\": \"object\",",
+											"    \"required\": [\"id\", \"docNumber\", \"publicationDate\", \"status\", \"title\", \"validity\", \"publisher\", \"committee\", \"ics\", \"normativeReferences\"],",
+											"    \"additionalProperties\": false,",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" },",
+											"        \"docNumber\": { \"type\": \"string\" },",
+											"        \"publicationDate\": { \"type\": \"string\", \"format\": \"date\" },",
+											"        \"withdrawalDate\": { \"type\": [\"string\", \"null\"], \"format\": \"date\" },",
+											"        \"status\": { \"type\": \"string\" },",
+											"        \"title\": { \"type\": \"string\" },",
+											"        \"abstract\": { \"type\": [\"string\", \"null\"] },",
+											"        \"validity\": { \"type\": \"boolean\" },",
+											"        \"publisher\": { \"type\": \"string\" },",
+											"        \"committee\": {",
+											"            \"type\": [\"object\", \"null\"],",
+											"            \"required\": [\"displayName\"],",
+											"            \"additionalProperties\": false,",
+											"            \"properties\": {",
+											"                \"displayName\": { \"type\": \"string\" },",
+											"                \"title\": { \"type\": \"string\" }",
+											"            }",
+											"        },",
+											"        \"ics\": {",
+											"            \"type\": \"array\",",
+											"            \"items\": {",
+											"                \"type\": \"object\",",
+											"                \"required\": [\"code\"],",
+											"                \"additionalProperties\": false,",
+											"                \"properties\": {",
+											"                    \"code\": { \"type\": \"string\" },",
+											"                    \"title\": { \"type\": \"string\" }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"publicationMeta\": {",
+											"            \"type\": [\"object\", \"null\"],",
+											"            \"properties\": {",
+											"                \"pageCount\": { \"type\": \"integer\" },",
+											"                \"fileSize\": { \"type\": \"integer\" },",
+											"                \"outline\": {",
+											"                    \"type\": [\"object\", \"null\"],",
+											"                    \"properties\": {",
+											"                        \"content\": {",
+											"                            \"type\": \"array\",",
+											"                            \"items\": {",
+											"                                \"type\": \"object\",",
+											"                                \"required\": [\"title\", \"page\", \"children\"],",
+											"                                \"properties\": {",
+											"                                    \"title\": { \"type\": \"string\" },",
+											"                                    \"page\": { \"type\": \"integer\" },",
+											"                                    \"children\": {",
+											"                                        \"type\": \"array\",",
+											"                                        \"items\": {",
+											"                                            \"type\": \"object\",",
+											"                                            \"required\": [\"title\", \"page\", \"children\"],",
+											"                                            \"properties\": {",
+											"                                                \"title\": { \"type\": \"string\" },",
+											"                                                \"page\": { \"type\": \"integer\" },",
+											"                                                \"children\": {",
+											"                                                    \"type\": \"array\",",
+											"                                                    \"items\": {}",
+											"                                                }",
+											"                                            }",
+											"                                        }",
+											"                                    }",
+											"                                }",
+											"                            }",
+											"                        }",
+											"                    }",
+											"                }",
+											"            }",
+											"        },",
+											"        \"normativeReferences\": {",
+											"            \"type\": \"array\",",
+											"            \"additionalProperties\": false,",
+											"            \"properties\": {",
+											"                \"docNumberIssueDate\": { \"type\": \"string\" },",
+											"                \"id\": { \"type\": [\"string\", \"null\"] },",
+											"            }",
+											"        }",
+											"    }",
+											"};",
+											"",
+											"",
+											"",
+											"pm.test(\"Response matches expected schema\", function () {",
+											"  pm.response.to.have.jsonSchema(schema);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{api-key}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-API-KEY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/portfolio/{{docId}}/details",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"portfolio",
+										"{{docId}}",
+										"details"
+									],
+									"query": [
+										{
+											"key": "Range",
+											"value": "100",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Portfolio",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ipp-baseurl}}/api/v1/portfolio",
+											"host": [
+												"{{ipp-baseurl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"portfolio"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "DD - Negative Tests",
+					"item": []
+				},
+				{
+					"name": "DD - Functional Tests",
+					"item": []
+				}
+			]
+		}
+	]
+}

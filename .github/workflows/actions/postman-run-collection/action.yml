@@ -1,6 +1,6 @@
 name: Run Postman Collection
 inputs:
-  test-name:
+  test-run-name:
     description: General name of the postman collection. Used for reporting purposes
     required: true
   collection:
@@ -58,7 +58,7 @@ runs:
       shell: bash
 
     - name: Run collections
-      id: run_collections
+      id: run-collections
       run: |
         # Initial Command to run Newman with the provided inputs
         declare -a NEWMAN_ARGS
@@ -101,7 +101,7 @@ runs:
       shell: bash
 
     - name: Upload Report
-      id: upload_report
+      id: upload-report
       uses: actions/upload-artifact@v4
       if: always()
       with:
@@ -116,8 +116,8 @@ runs:
       run: |
         report=$(jq -cn \
           --arg name "${{ inputs.test-name }}" \
-          --arg reportUrl "${{ steps.upload_report.outputs.artifact-url  }}" \
-          --arg succeeded "${{ steps.run_collections.outcome }}" \
+          --arg reportUrl "${{ steps.upload-report.outputs.artifact-url  }}" \
+          --arg succeeded "${{ steps.run-collections.outcome }}" \
           '{name: $name, reportUrl: $reportUrl, succeeded: ($succeeded == "success")}')
         
         echo "Generated Report JSON: $report"
