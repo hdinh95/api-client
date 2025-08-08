@@ -5,16 +5,9 @@ on:
     branches:
       - main
   repository_dispatch:
-    types: [ipp-merge-pr]
+    types: [ipp-pr-merge]
 
 jobs:
-  pr-merge:
-    if: github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4.2.2
-
   api-tests:
     name: IPP API Tests
     runs-on: ubuntu-latest
@@ -46,7 +39,6 @@ jobs:
           folder: ${{matrix.folder}}
           report-filename: ${{matrix.report-filename}}
 
-      # TODO: Use a own action for this
       - name: Use Matrix Output Storage
         uses: cloudposse/github-action-matrix-outputs-write@v1
         if: always()
@@ -56,59 +48,32 @@ jobs:
           outputs: |-
             result: ${{ steps.execute-postman-collections.outputs.report }}
 
-  # TODO: Use a own action for this
   post-comment:
-    needs: [ api-tests ]
-    if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr' }}
-    uses: ./.github/workflows/common_jira_commenter.yaml
-    with:
-      project-name: 'IPP'
-      matrix-step-name-output: "api-tests"
-      ticket-key: ${{ github.event.client_payload.ticket_key }}
-    secrets:
-      jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
-      jira-user-api-token: ${{ secrets.JIRA_USER_API_TOKEN }}
+    needs:
+      - api-tests
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-pr-merge' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
 
-#  post-comment:
-#    needs:
-#      - api-tests
-#    runs-on: ubuntu-latest
-#    if: ${{ always() && github.event_name == 'repository_dispatch' && github.event.action == 'ipp-merge-pr' }}
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v4.2.2
-#
-#      - name: Read Matrix Outputs Storage
-#        uses: cloudposse/github-action-matrix-outputs-read@v1
-#        id: read
-#        with:
-#          matrix-step-name: api-tests
-#
-#      - name: Convert Matrix Outputs to JSON Array
-#        id: convert-matrix-outputs-to-json_array
-#        run: |
-#          result=${{ toJSON(steps.read.outputs.result) }}
-#          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
-#
-#      - name: Post Comment on Jira
-#        uses: ./.github/workflows/actions/jira-commenter
-#        with:
-#          project-name: 'IPP'
-#          reports: '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}'
-#          ticket-key: ${{ github.event.client_payload.ticket_key }}
-#          jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
-#          jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}
+      - name: Read Matrix Outputs Storage
+        uses: cloudposse/github-action-matrix-outputs-read@v1
+        id: read
+        with:
+          matrix-step-name: api-tests
 
-#    api-tests:
-#      name: Data-Driven API Tests
-#      runs-on: ubuntu-latest
-#      strategy:
-#        fail-fast: false
-#        matrix:
-#          include:
-#            - folder: "basic"
-#              test-name: "Basic Tests"
-#              report-filename: positive-report
-#            - folder: "fail"
-#              test-name: "Fail Tests"
-#              report-filename: negative-report
+      - name: Convert Matrix Outputs to JSON Array
+        id: convert-matrix-outputs-to-json_array
+        run: |
+          result=${{ toJSON(steps.read.outputs.result) }}
+          echo result=$(echo "$result" | jq '.result' | jq -c 'to_entries[] | .value' | jq -s) >> $GITHUB_OUTPUT
+
+      - name: Post Comment on Jira
+        uses: ./.github/workflows/actions/jira-commenter
+        with:
+          project-name: 'IPP'
+          reports: '${{ steps.convert-matrix-outputs-to-json_array.outputs.result }}'
+          ticket-key: ${{ github.event.client_payload.ticket_key }}
+          jira-user-email: ${{secrets.JIRA_USER_EMAIL}}
+          jira-user-api-token: ${{secrets.JIRA_USER_API_TOKEN}}

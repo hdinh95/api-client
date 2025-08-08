@@ -65,12 +65,16 @@ runs:
         
         NEWMAN_ARGS=(
           "run" "${{inputs.collection}}"
-          "-e" "${{inputs.environment}}"
           "-r" "cli,htmlextra"
           "--reporter-htmlextra-export" "${{inputs.report-directory}}/${{inputs.report-filename}}.html"
           "--reporter-htmlextra-skipSensitiveData"
           "--reporter-htmlextra-showOnlyFails"
         )
+        
+        # Apply Postman Environment
+        if [ "${{inputs.environment}}" != "" ]; then
+        NEWMAN_ARGS+=("-e" "{{inputs.environment}}")
+        fi
         
         # Apply Postman Datasource
         if [ "${{inputs.datasource}}" != "" ]; then
