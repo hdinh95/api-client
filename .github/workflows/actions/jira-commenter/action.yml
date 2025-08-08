@@ -46,7 +46,7 @@ runs:
           fi
         
           comment+="\\\\$name - $succeeded \\\\$url "
-        done < <(echo '${{ inputs.reports }}' | jq -c '.[]')
+        done < <(echo '${{ inputs.reports }}' | jq 'sort_by(.name) | .[]' -c)
         
         jiraPayload=$(jq -n -c \
           --arg bodyContent "$comment" \
