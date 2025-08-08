@@ -73,7 +73,7 @@ runs:
         
         # Apply Postman Environment
         if [ "${{inputs.environment}}" != "" ]; then
-        NEWMAN_ARGS+=("-e" "{{inputs.environment}}")
+        NEWMAN_ARGS+=("-e" "${{inputs.environment}}")
         fi
         
         # Apply Postman Datasource
